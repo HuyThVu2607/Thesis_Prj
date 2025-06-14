@@ -61,6 +61,25 @@
 #define ADS1115_CONVER_REG 0x0
 #define ADS1115_CONFIG_REG 0x1
 
+// ========================
+// Channel bitmask defines
+// ========================
+
+// ADS1115 - IC0 (Device 0)
+#define ADS1115_IC0_CH0    (1 << 0)  // Enable reading Channel 0 of ADS1115 IC0 (AIN0)
+#define ADS1115_IC0_CH1    (1 << 1)  // Enable reading Channel 1 of ADS1115 IC0 (AIN1)
+#define ADS1115_IC0_CH2    (1 << 2)  // Enable reading Channel 2 of ADS1115 IC0 (AIN2)
+#define ADS1115_IC0_CH3    (1 << 3)  // Enable reading Channel 3 of ADS1115 IC0 (AIN3)
+
+// ADS1115 - IC1 (Device 1)
+#define ADS1115_IC1_CH0    (1 << 4)  // Enable reading Channel 0 of ADS1115 IC1 (AIN0)
+#define ADS1115_IC1_CH1    (1 << 5)  // Enable reading Channel 1 of ADS1115 IC1 (AIN1)
+#define ADS1115_IC1_CH2    (1 << 6)  // Enable reading Channel 2 of ADS1115 IC1 (AIN2)
+#define ADS1115_IC1_CH3    (1 << 7)  // Enable reading Channel 3 of ADS1115 IC1 (AIN3)
+
+// All channels (IC0 + IC1)
+#define ADS1115_ALL_CHANNELS  0xFF  // Enable all 8 channels
+
 /* TIMEOUT */
 #define ADS1115_TIMEOUT 1 // Timeout for HAL I2C functions.
 
@@ -69,5 +88,9 @@ HAL_StatusTypeDef ADS1115_Init_C0(I2C_HandleTypeDef *handler, uint16_t setDataRa
 HAL_StatusTypeDef ADS1115_Init_C1(I2C_HandleTypeDef *handler, uint16_t setDataRate, uint16_t setPGA);
 HAL_StatusTypeDef ADS1115_readSingleEnded_C0(uint16_t muxPort, float *voltage);
 HAL_StatusTypeDef ADS1115_readSingleEnded_C1(uint16_t muxPort, float *voltage);
+void ads1115_read(uint8_t control);
+
+
+
 
 #endif /* __ADS1115__ */

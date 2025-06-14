@@ -20,11 +20,12 @@ rule browsedata
 
 
 #Build steps
-build freertos.pbi : index freertos.xcl
 build main.pbi : index main.xcl
 build stm32f4xx_hal_msp.pbi : index stm32f4xx_hal_msp.xcl
 build stm32f4xx_hal_timebase_tim.pbi : index stm32f4xx_hal_timebase_tim.xcl
 build stm32f4xx_it.pbi : index stm32f4xx_it.xcl
+build fatfs.pbi : index fatfs.xcl
+build user_diskio.pbi : index user_diskio.xcl
 build system_stm32f4xx.pbi : index system_stm32f4xx.xcl
 build stm32f4xx_hal.pbi : index stm32f4xx_hal.xcl
 build stm32f4xx_hal_cortex.pbi : index stm32f4xx_hal_cortex.xcl
@@ -48,26 +49,19 @@ build stm32f4xx_hal_uart.pbi : index stm32f4xx_hal_uart.xcl
 build ads1115.pbi : index ads1115.xcl
 build sht31.pbi : index sht31.xcl
 build process.pbi : index process.xcl
-build cmsis_os.pbi : index cmsis_os.xcl
-build croutine.pbi : index croutine.xcl
-build event_groups.pbi : index event_groups.xcl
-build heap_4.pbi : index heap_4.xcl
-build list.pbi : index list.xcl
-build port.pbi : index port.xcl
-build queue.pbi : index queue.xcl
-build stream_buffer.pbi : index stream_buffer.xcl
-build tasks.pbi : index tasks.xcl
-build timers.pbi : index timers.xcl
+build diskio.pbi : index diskio.xcl
+build ff.pbi : index ff.xcl
+build ff_gen_drv.pbi : index ff_gen_drv.xcl
+build syscall.pbi : index syscall.xcl
 build ili9341.pbi : index ili9341.xcl
 build UI_process.pbi : index UI_process.xcl
-build DLGER_F407_part0.pbi : link freertos.pbi main.pbi stm32f4xx_hal_msp.pbi stm32f4xx_hal_timebase_tim.pbi stm32f4xx_it.pbi system_stm32f4xx.pbi
-build DLGER_F407_part1.pbi : link stm32f4xx_hal.pbi stm32f4xx_hal_cortex.pbi stm32f4xx_hal_dma.pbi stm32f4xx_hal_dma_ex.pbi stm32f4xx_hal_exti.pbi stm32f4xx_hal_flash.pbi
-build DLGER_F407_part2.pbi : link stm32f4xx_hal_flash_ex.pbi stm32f4xx_hal_flash_ramfunc.pbi stm32f4xx_hal_gpio.pbi stm32f4xx_hal_i2c.pbi stm32f4xx_hal_i2c_ex.pbi stm32f4xx_hal_pwr.pbi
-build DLGER_F407_part3.pbi : link stm32f4xx_hal_pwr_ex.pbi stm32f4xx_hal_rcc.pbi stm32f4xx_hal_rcc_ex.pbi stm32f4xx_hal_spi.pbi stm32f4xx_hal_tim.pbi stm32f4xx_hal_tim_ex.pbi
-build DLGER_F407_part4.pbi : link stm32f4xx_hal_uart.pbi ads1115.pbi sht31.pbi process.pbi cmsis_os.pbi croutine.pbi
-build DLGER_F407_part5.pbi : link event_groups.pbi heap_4.pbi list.pbi port.pbi queue.pbi stream_buffer.pbi
-build DLGER_F407_part6.pbi : link tasks.pbi timers.pbi ili9341.pbi UI_process.pbi
-build DLGER_F407.pbd : link DLGER_F407_part0.pbi DLGER_F407_part1.pbi DLGER_F407_part2.pbi DLGER_F407_part3.pbi DLGER_F407_part4.pbi DLGER_F407_part5.pbi DLGER_F407_part6.pbi
+build DLGER_F407_part0.pbi : link main.pbi stm32f4xx_hal_msp.pbi stm32f4xx_hal_timebase_tim.pbi stm32f4xx_it.pbi fatfs.pbi user_diskio.pbi
+build DLGER_F407_part1.pbi : link system_stm32f4xx.pbi stm32f4xx_hal.pbi stm32f4xx_hal_cortex.pbi stm32f4xx_hal_dma.pbi stm32f4xx_hal_dma_ex.pbi stm32f4xx_hal_exti.pbi
+build DLGER_F407_part2.pbi : link stm32f4xx_hal_flash.pbi stm32f4xx_hal_flash_ex.pbi stm32f4xx_hal_flash_ramfunc.pbi stm32f4xx_hal_gpio.pbi stm32f4xx_hal_i2c.pbi stm32f4xx_hal_i2c_ex.pbi
+build DLGER_F407_part3.pbi : link stm32f4xx_hal_pwr.pbi stm32f4xx_hal_pwr_ex.pbi stm32f4xx_hal_rcc.pbi stm32f4xx_hal_rcc_ex.pbi stm32f4xx_hal_spi.pbi stm32f4xx_hal_tim.pbi
+build DLGER_F407_part4.pbi : link stm32f4xx_hal_tim_ex.pbi stm32f4xx_hal_uart.pbi ads1115.pbi sht31.pbi process.pbi diskio.pbi
+build DLGER_F407_part5.pbi : link ff.pbi ff_gen_drv.pbi syscall.pbi ili9341.pbi UI_process.pbi
+build DLGER_F407.pbd : link DLGER_F407_part0.pbi DLGER_F407_part1.pbi DLGER_F407_part2.pbi DLGER_F407_part3.pbi DLGER_F407_part4.pbi DLGER_F407_part5.pbi
 build DLGER_F407.pbw : browsedata DLGER_F407.pbd
 
 

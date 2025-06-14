@@ -47,15 +47,16 @@
 uint8_t ADS1115_devAddress0 = 0x48;     // 0b1001000 = 0x48 = 72
 uint8_t ADS1115_devAddress1 = 0x49;     // 0b1001001 = 0x49 = 73
  
- I2C_HandleTypeDef ADS1115_I2C_Handler;	// HAL I2C handler store variable.
- 
- uint16_t ADS1115_dataRate = ADS1115_DATA_RATE_128; // Default
- uint16_t ADS1115_pga  =     ADS1115_PGA_TWO; // Default
- uint16_t ADS1115_port =     ADS1115_MUX_AIN0; // Default
- 
- uint8_t ADS1115_config[2];
- uint8_t ADS1115_rawValue[2];
- float ADS1115_voltCoef; // Voltage coefficient.
+I2C_HandleTypeDef ADS1115_I2C_Handler;	// HAL I2C handler store variable.
+
+uint16_t ADS1115_dataRate = ADS1115_DATA_RATE_128; // Default
+uint16_t ADS1115_pga  =     ADS1115_PGA_TWO; // Default
+uint16_t ADS1115_port =     ADS1115_MUX_AIN0; // Default
+
+uint8_t ADS1115_config[2];
+uint8_t ADS1115_rawValue[2];
+float ADS1115_voltCoef; // Voltage coefficient.
+volatile float g_voltage[8];
  
  /* Function definitions. */
  HAL_StatusTypeDef ADS1115_Init_C0(I2C_HandleTypeDef *handler, uint16_t setDataRate, uint16_t setPGA) {
@@ -212,5 +213,41 @@ HAL_StatusTypeDef ADS1115_readSingleEnded_C0(uint16_t muxPort, float *voltage) {
 
 	return HAL_ERROR;
 
+}
+
+
+void ads1115_read(uint8_t control)
+{
+    for (uint8_t i = 0; i < 8; ++i)
+    {
+        if ((control >> i) & 0x01)  
+        {
+            uint8_t channel = i % 4;
+            float voltage = 0.0f;
+
+            HAL_StatusTypeDef status;
+            if (i < 4)
+            {
+                status = ADS1115_readSingleEnded_C0((0x04 + channel) << 4, &voltage);
+            }
+            else
+            {
+                status = ADS1115_readSingleEnded_C1((0x04 + channel) << 4, &voltage);
+            }
+
+            if (status == HAL_OK)
+            {
+                g_voltage[i] = voltage;
+            }
+            else
+            {
+                g_voltage[i] = -1.0f; 
+            }
+        }
+        else
+        {
+            g_voltage[i] = -1.0f; 
+        }
+    }
 }
  
