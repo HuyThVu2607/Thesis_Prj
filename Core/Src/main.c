@@ -17,19 +17,20 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "fatfs.h"
 #include "process.h"
+#include "fatfs.h"
 
 int main(void)
 {
-  Process_Init();
-  while (1)
-  {
+    Process_Init();
+    while (1)
+    {
     /* USER CODE END WHILE */
-    Process_Run();
+        
     /* USER CODE BEGIN 3 */
-  }
+    }
   /* USER CODE END 3 */
 }
+
+
 
