@@ -23,10 +23,12 @@
 int main(void)
 {
     Process_Init();
+    UI_Process_Init();
     while (1)
     {
     /* USER CODE END WHILE */
-        
+        Process_Run();
+        UI_Process_Run();
     /* USER CODE BEGIN 3 */
     }
   /* USER CODE END 3 */
