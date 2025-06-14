@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.40.2.214/W32 for ARM                  14/Jun/2025  12:58:41
+# IAR ELF Linker V8.40.2.214/W32 for ARM                  14/Jun/2025  13:20:00
 # Copyright 2007-2019 IAR Systems AB.
 #
 #    Output file  =
@@ -10,7 +10,7 @@
 #        C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\List\DLGER_F407.map
 #    Command line =
-#        -f C:\Users\huyvu\AppData\Local\Temp\EWC75D.tmp
+#        -f C:\Users\huyvu\AppData\Local\Temp\EW4D3C.tmp
 #        ("C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\ads1115.o"
 #        "C:\Users\huyvu\OneDrive -
@@ -24,6 +24,8 @@
 #        "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\heap_4.o"
 #        "C:\Users\huyvu\OneDrive -
+#        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\ili9341.o"
+#        "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\list.o"
 #        "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\main.o"
@@ -31,6 +33,8 @@
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\port.o"
 #        "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\portasm.o"
+#        "C:\Users\huyvu\OneDrive -
+#        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\process.o"
 #        "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\queue.o"
 #        "C:\Users\huyvu\OneDrive -
@@ -89,6 +93,8 @@
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\tasks.o"
 #        "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\timers.o"
+#        "C:\Users\huyvu\OneDrive -
+#        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Obj\UI_process.o"
 #        --no_out_extension -o "C:\Users\huyvu\OneDrive -
 #        hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407\EWARM\DLGER_F407\Exe\DLGER_F407.out"
 #        --redirect _Printf=_PrintfFullNoMb --redirect _Scanf=_ScanfFullNoMb

@@ -1198,6 +1198,12 @@
                 <name>$PROJ_DIR$\..\middle\sht31.h</name>
             </file>
         </group>
+        <file>
+            <name>$PROJ_DIR$\..\middle\process.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\middle\process.h</name>
+        </file>
     </group>
     <group>
         <name>Middlewares</name>
@@ -1242,9 +1248,21 @@
         <name>User_Interface</name>
         <group>
             <name>ILI9341</name>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341.h</name>
+            </file>
         </group>
         <group>
             <name>wifi_esp32</name>
         </group>
+        <file>
+            <name>$PROJ_DIR$\..\userinterface\UI_process.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\userinterface\UI_process.h</name>
+        </file>
     </group>
 </project>
