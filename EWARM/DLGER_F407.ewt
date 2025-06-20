@@ -1316,6 +1316,18 @@
         </group>
         <group>
             <name>microSD</name>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\fsfat32.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\fsfat32.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\microsd.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\microsd.h</name>
+            </file>
         </group>
         <group>
             <name>rtc</name>

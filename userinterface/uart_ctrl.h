@@ -6,6 +6,7 @@
 #include "string.h"
 #include "stm32f4xx_it.h"
 #include "stdbool.h"
+#include "stdio.h"
 //Define
 #define UART_RX_BUFFER_SIZE 128
 

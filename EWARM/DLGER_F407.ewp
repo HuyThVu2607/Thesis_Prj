@@ -360,6 +360,7 @@
                     <state>$PROJ_DIR$/../FATFS/Target</state>
                     <state>$PROJ_DIR$/../FATFS/App</state>
                     <state>$PROJ_DIR$/../Middlewares/Third_Party/FatFs/src</state>
+                    <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\microSD</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1197,6 +1198,18 @@
         </group>
         <group>
             <name>microSD</name>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\fsfat32.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\fsfat32.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\microsd.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\microSD\microsd.h</name>
+            </file>
         </group>
         <group>
             <name>rtc</name>
