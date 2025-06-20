@@ -1,6 +1,8 @@
 //Include library
 #include "UI_process.h"
 
+extern UART_HandleTypeDef huart2;
+
 void UI_Process_Init(void){
     
 }

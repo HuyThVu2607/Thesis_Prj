@@ -36,6 +36,9 @@ void Process_Init(void){
     MX_USART2_UART_Init();
     MX_USART3_UART_Init();
     MX_FATFS_Init();
+    
+    //Init interrupt receive uart2
+    
     //Init External ADC
     if(ADS1115_Init_C0(&hi2c2, ADS1115_DATA_RATE_128, ADS1115_PGA_ONE) != HAL_OK){
          gCheckInit = false;
@@ -43,14 +46,15 @@ void Process_Init(void){
     if(ADS1115_Init_C1(&hi2c2, ADS1115_DATA_RATE_128, ADS1115_PGA_ONE) != HAL_OK){
          gCheckInit = false;
     } 
-    
+    deselectSDcard();
+    SD_init();
     
 }
 
 //Middle system run
 void Process_Run(void){
     ads1115_read(ADS1115_IC0_CH1 | ADS1115_IC0_CH2 | ADS1115_IC1_CH0 | ADS1115_IC1_CH2);
-    HAL_Delay(1000);
+    HAL_Delay(10);
 }
 
 

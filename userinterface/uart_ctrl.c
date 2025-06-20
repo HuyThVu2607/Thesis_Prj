@@ -13,32 +13,37 @@ volatile    bool    bStatusLCD  = true;
 //Global Variable
 static char gUartLineBuffer[128];
 static bool bDataInProcess = false;
+static uint8_t Index = 0;
 
 void uart_ctrl_receive(void){
     if(!bDataInProcess){
-        uint8_t lUartDataReceive;
-        uint8_t Index = 0;
+//        uint8_t lUartDataReceive;
 //        if(HAL_UART_Receive(&huart2, &lUartDataReceive, 1, 5) == HAL_OK){
-//            if ((lUartDataReceive == '\n' || lUartDataReceive == '\r')&& Index > 0){
+//            if ((lUartDataReceive == '\n' || lUartDataReceive == '\r')){
 //                gUartLineBuffer[Index] = '\0';
 //                Index = 0;
 //                bDataInProcess = true;
+//                char ack[] = "OK\r\n";
+//                HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), HAL_MAX_DELAY);
 //            }else if(Index < UART_RX_BUFFER_SIZE - 1){
 //                gUartLineBuffer[Index++] = lUartDataReceive;
 //            }
 //        }
-        strcpy(gUartLineBuffer, "AT+DISADC\r\n");
-        char *Clean = gUartLineBuffer;
-        while (*Clean != '\0') {
-            if (*Clean == '\r' || *Clean == '\n') {
-                *Clean = '\0';  
-                break;
-            }
-            Clean++;
-        }
-        bDataInProcess = true;
+//        char *Clean = gUartLineBuffer;
+//        while (*Clean != '\0') {
+//            if (*Clean == '\r' || *Clean == '\n') {
+//                *Clean = '\0';  
+//                break;
+//            }
+//            Clean++;
+//        }
+//        bDataInProcess = true;
+        char ack[] = "OK\r\n";
+        HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), 10);
+
     }
 }
+
 
 void uart_handle_mess(void){
     if(bDataInProcess){
