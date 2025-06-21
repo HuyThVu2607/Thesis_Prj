@@ -2,13 +2,13 @@
 #define __PROCESS__
 
 //Include library
-
+#include "stm32f4xx_hal.h"
 #include "main.h"
 #include "ads1115.h"
 #include "sht31.h"
 #include "fatfs.h"
-#include "microsd.h"
-#include "fsfat32.h"
+#include "ff.h"
+#include <stdio.h>
 //Define
 
 //COMMAND INIT ERROR
@@ -24,10 +24,6 @@
 
 void Process_Init(void);
 void Process_Run(void);
-
-
-
-
 
 
 #endif /* __PROCESS__ */

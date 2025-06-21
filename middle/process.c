@@ -13,6 +13,10 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 
+FATFS fs;
+FIL fil;
+UINT bw;
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
@@ -23,6 +27,14 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 
 //Init system
+FATFS fs;
+FATFS *pfs;
+FIL fil;
+FRESULT fres;
+DWORD fre_clust;
+uint32_t totalSpace, freeSpace;
+char buffer[100];
+
 
 void Process_Init(void){
     //Init peripheral
@@ -36,6 +48,51 @@ void Process_Init(void){
     MX_USART2_UART_Init();
     MX_USART3_UART_Init();
     MX_FATFS_Init();
+    HAL_Delay(500);
+
+    //For test SD card
+    	/* Mount SD Card */
+	fres =f_mount(&fs, "", 0);
+
+	/* Open file to write */
+	fres = f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+
+	/* Check freeSpace space */
+	fres = f_getfree("", &fre_clust, &pfs);
+
+	totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
+	freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
+
+	/* free space is less than 1kb */
+	if(freeSpace < 1)
+
+	/* Writing text */
+	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
+	f_puts("Save the world!!!", &fil);
+
+	/* Close file */
+	fres = f_close(&fil);
+
+	/* Open file to read */
+	fres = f_open(&fil, "first.txt", FA_READ);
+
+	while(f_gets(buffer, sizeof(buffer), &fil))
+	{
+		/* SWV output */
+		printf("%s", buffer);
+		fflush(stdout);
+	}
+
+	/* Close file */
+	if(f_close(&fil) != FR_OK)
+		//_Error_Handler(__FILE__, __LINE__);
+
+	/* Unmount SDCARD */
+	if(f_mount(NULL, "", 1) != FR_OK)
+		//_Error_Handler(__FILE__, __LINE__);
+
+  //End
+
     
     //Init interrupt receive uart2
     
@@ -46,8 +103,8 @@ void Process_Init(void){
     if(ADS1115_Init_C1(&hi2c2, ADS1115_DATA_RATE_128, ADS1115_PGA_ONE) != HAL_OK){
          gCheckInit = false;
     } 
-    deselectSDcard();
-    SD_init();
+    
+    
     
 }
 

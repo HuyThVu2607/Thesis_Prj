@@ -6,6 +6,7 @@
         "limits": "c",
         "type_traits": "c",
         "xutility": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stm32f4xx_hal.h": "c"
     }
 }
