@@ -45,4 +45,5 @@ fsfat32.pbi: \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_tim.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_uart.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\microSD/fsfat32.h
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src\diskio.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src/integer.h
