@@ -56,7 +56,7 @@ uint16_t ADS1115_port =     ADS1115_MUX_AIN0; // Default
 uint8_t ADS1115_config[2];
 uint8_t ADS1115_rawValue[2];
 float ADS1115_voltCoef; // Voltage coefficient.
-volatile float g_voltage[8];
+extern float g_voltage[8];
  
  /* Function definitions. */
  HAL_StatusTypeDef ADS1115_Init_C0(I2C_HandleTypeDef *handler, uint16_t setDataRate, uint16_t setPGA) {

@@ -13,10 +13,6 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 
-FATFS fs;
-FIL fil;
-UINT bw;
-
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
@@ -36,6 +32,9 @@ uint32_t totalSpace, freeSpace;
 char buffer[100];
 uint8_t gByte;
 uint8_t Data_RX[128];
+uint8_t gSelectChADC=0;
+float g_voltage[8];
+bool bLiveData = false;
 
 void Process_Init(void){
     //Init peripheral
@@ -112,8 +111,17 @@ void Process_Init(void){
 
 //Middle system run
 void Process_Run(void){
-    ads1115_read(ADS1115_IC0_CH1 | ADS1115_IC0_CH2 | ADS1115_IC1_CH0 | ADS1115_IC1_CH2);
-    HAL_Delay(10);
+    if(bLiveData){
+        char LogMsg[100];
+        sprintf(LogMsg, ">>ADC LIVE DATA!\r\n");
+        HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);          
+        ads1115_read(gSelectChADC);
+        for(int i = 0; i < 8; i++){
+            sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mV\r\n",i,g_voltage[i]);
+            HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);    
+        }
+        HAL_Delay(5000);
+    }
 }
 
 

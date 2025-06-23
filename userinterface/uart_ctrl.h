@@ -26,6 +26,9 @@ typedef enum {
     CMD_CONFIG          ,       
     CMD_EXIT            ,
     CMD_STATUS          ,
+    CMD_LIVEDATA        ,
+    CMD_DISLIVEDATA     ,
+    CMD_GETDATA         ,
     CMD_SET
 } AT_Command_t;
 
