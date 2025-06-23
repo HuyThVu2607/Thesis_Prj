@@ -11,13 +11,14 @@ volatile    bool    bStatusTEMP = true;
 volatile    bool    bStatusLCD  = true;
 
 extern uint8_t Data_RX[128];
+extern uint8_t gSelectChADC;
 //Global Variable
-static char gUartLineBuffer[12];
-static bool bDataInProcess = false;
-volatile uint8_t Index = 0;
-extern uint8_t gByte;
-char    gMessRespone[100];
-
+static char     gUartLineBuffer[12];
+static bool     bDataInProcess = false;
+volatile        uint8_t Index = 0;
+extern          uint8_t gByte;
+char            gMessRespone[100];
+extern bool     bLiveData;
 void uart_ctrl_receive(void){
     if(!bDataInProcess){
 //        uint8_t lUartDataReceive;
@@ -55,8 +56,9 @@ void uart_handle_mess(void){
             HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), 10);
             AT_Command_t StatusCommnad = identify_command(Data_RX);
             switch (StatusCommnad){
-            case CMD_ENAADC:
+            case CMD_ENAADC:       
                 bStatusADC  = true;
+                sscanf((char*)Data_RX, "AT+ENAADC=%hhu", &gSelectChADC);
                 sprintf(gMessRespone, ">>ADC IS ENABLE!\r\n");
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
@@ -68,7 +70,18 @@ void uart_handle_mess(void){
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
                 break;
-
+            case CMD_LIVEDATA:
+                bLiveData = true;
+                sprintf(gMessRespone, ">>LIVEDATA IS ENABLE!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                bDataInProcess = false;              
+                break;  
+            case CMD_DISLIVEDATA:
+                bLiveData = false;
+                sprintf(gMessRespone, ">>LIVEDATA IS DISBLE!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                bDataInProcess = false;              
+                break;  
             case CMD_CONFIG:
                 uart_proc_config();
 
@@ -111,6 +124,8 @@ AT_Command_t identify_command(const char *cmd)
     else if (strncmp(cmd, "AT+DISLCD",9)  == 0) return CMD_DISLCD;
     else if (strncmp(cmd, "AT+ENATEMP",10) == 0) return CMD_ENATEMP;
     else if (strncmp(cmd, "AT+DISTEMP",10) == 0) return CMD_DISTEMP;
+    else if (strncmp(cmd, "AT+ENALIVE",10) == 0) return CMD_LIVEDATA;
+    else if (strncmp(cmd, "AT+DISLIVE",10) == 0) return CMD_DISLIVEDATA;
     else if (strncmp(cmd, "AT+CONFIG",9)  == 0) return CMD_CONFIG;
     else if (strncmp(cmd, "AT+EXIT",7)    == 0) return CMD_EXIT;
     else if (strncmp(cmd, "AT+STATUS",8)  == 0) return CMD_STATUS;
