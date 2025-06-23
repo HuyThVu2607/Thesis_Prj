@@ -1,50 +1,50 @@
 ff_gen_drv.pbi: \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src\ff_gen_drv.c \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/ff_gen_drv.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/diskio.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/integer.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/ff.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../FATFS/Target\ffconf.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Core/Inc\main.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Core/Inc\stm32f4xx_hal_conf.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_rcc.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Device/ST/STM32F4xx/Include\stm32f4xx.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include\core_cm4.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src\ff_gen_drv.c \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/ff_gen_drv.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/diskio.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/integer.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\Middlewares\Third_Party\FatFs\src/ff.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../FATFS/Target\ffconf.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Core/Inc\main.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Core/Inc\stm32f4xx_hal_conf.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_rcc.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Device/ST/STM32F4xx/Include\stm32f4xx.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include\core_cm4.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdint.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ycheck.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\yvals.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Defaults.h \
   C:\\Program\ Files\ (x86)\\IAR\ Systems\\Embedded\ Workbench\ 8.3\\arm\\inc\\c\\DLib_Config_Full.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include/cmsis_version.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include/cmsis_compiler.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include\cmsis_iccarm.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include/cmsis_version.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include/cmsis_compiler.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include\cmsis_iccarm.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\iccarm_builtin.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include/mpu_armv7.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Include/mpu_armv7.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stddef.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ysizet.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_gpio.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_exti.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_dma.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_cortex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_flash.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_i2c.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_pwr.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_spi.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_tim.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_uart.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_gpio.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_exti.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_dma.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_cortex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_flash.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_i2c.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_pwr.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_spi.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_tim.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_uart.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdlib.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product_stdlib.h

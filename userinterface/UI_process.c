@@ -8,6 +8,6 @@ void UI_Process_Init(void){
 }
 
 void UI_Process_Run(void){
-    uart_ctrl_receive();
-    uart_handle_mess();
+    //uart_ctrl_receive();
+    //uart_handle_mess();
 }

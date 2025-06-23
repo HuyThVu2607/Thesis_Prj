@@ -34,7 +34,8 @@ FRESULT fres;
 DWORD fre_clust;
 uint32_t totalSpace, freeSpace;
 char buffer[100];
-
+uint8_t gByte;
+uint8_t Data_RX[128];
 
 void Process_Init(void){
     //Init peripheral
@@ -51,51 +52,52 @@ void Process_Init(void){
     HAL_Delay(500);
 
     //For test SD card
-    	/* Mount SD Card */
-	fres =f_mount(&fs, "", 0);
-
-	/* Open file to write */
-	fres = f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
-
-	/* Check freeSpace space */
-	fres = f_getfree("", &fre_clust, &pfs);
-
-	totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
-	freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
-
-	/* free space is less than 1kb */
-	if(freeSpace < 1)
-
-	/* Writing text */
-	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
-	f_puts("Save the world!!!", &fil);
-
-	/* Close file */
-	fres = f_close(&fil);
-
-	/* Open file to read */
-	fres = f_open(&fil, "first.txt", FA_READ);
-
-	while(f_gets(buffer, sizeof(buffer), &fil))
-	{
-		/* SWV output */
-		printf("%s", buffer);
-		fflush(stdout);
-	}
-
-	/* Close file */
-	if(f_close(&fil) != FR_OK)
-		//_Error_Handler(__FILE__, __LINE__);
-
-	/* Unmount SDCARD */
-	if(f_mount(NULL, "", 1) != FR_OK)
-		//_Error_Handler(__FILE__, __LINE__);
+    /* Mount SD Card */
+//	fres =f_mount(&fs, "", 0);
+//
+//	/* Open file to write */
+//	fres = f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+//
+//	/* Check freeSpace space */
+//	fres = f_getfree("", &fre_clust, &pfs);
+//
+//	totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
+//	freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
+//
+//	/* free space is less than 1kb */
+//	if(freeSpace < 1)
+//
+//	/* Writing text */
+//	f_puts("STM32 SD Card I/O Example via SPI\n", &fil);
+//	f_puts("Save the world!!!", &fil);
+//
+//	/* Close file */
+//	fres = f_close(&fil);
+//
+//	/* Open file to read */
+//	fres = f_open(&fil, "first.txt", FA_READ);
+//
+//	while(f_gets(buffer, sizeof(buffer), &fil))
+//	{
+//		/* SWV output */
+//		printf("%s", buffer);
+//		fflush(stdout);
+//	}
+//
+//	/* Close file */
+//	if(f_close(&fil) != FR_OK)
+//		//_Error_Handler(__FILE__, __LINE__);
+//
+//	/* Unmount SDCARD */
+//	if(f_mount(NULL, "", 1) != FR_OK)
+//		//_Error_Handler(__FILE__, __LINE__);
 
   //End
-
-    
+    char errMsg[] = "BEGIN TEST!\r\n";
+    HAL_UART_Transmit(&huart2, (uint8_t*)errMsg, strlen(errMsg), HAL_MAX_DELAY);
+        
     //Init interrupt receive uart2
-    
+    HAL_UART_Receive_IT(&huart2, &gByte, 1);
     //Init External ADC
     if(ADS1115_Init_C0(&hi2c2, ADS1115_DATA_RATE_128, ADS1115_PGA_ONE) != HAL_OK){
          gCheckInit = false;
@@ -323,7 +325,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
   huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {

@@ -360,7 +360,7 @@
                     <state>$PROJ_DIR$/../FATFS/Target</state>
                     <state>$PROJ_DIR$/../FATFS/App</state>
                     <state>$PROJ_DIR$/../Middlewares/Third_Party/FatFs/src</state>
-                    <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_Jun.15.2025\Thesis_Prj\microSD</state>
+                    <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\microSD</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
