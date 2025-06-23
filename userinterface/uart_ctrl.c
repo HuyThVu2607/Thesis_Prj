@@ -10,10 +10,13 @@ volatile    bool    bStatusRTC  = true;
 volatile    bool    bStatusTEMP = true;
 volatile    bool    bStatusLCD  = true;
 
+extern uint8_t Data_RX[128];
 //Global Variable
-static char gUartLineBuffer[128];
+static char gUartLineBuffer[12];
 static bool bDataInProcess = false;
-static uint8_t Index = 0;
+volatile uint8_t Index = 0;
+extern uint8_t gByte;
+char    gMessRespone[100];
 
 void uart_ctrl_receive(void){
     if(!bDataInProcess){
@@ -37,9 +40,9 @@ void uart_ctrl_receive(void){
 //            }
 //            Clean++;
 //        }
-//        bDataInProcess = true;
-        char ack[] = "OK\r\n";
-        HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), 10);
+        bDataInProcess = true;
+//        char ack[] = "OK\r\n";
+//        HAL_UART_Transmit(&huart2, (uint8_t *)ack, sizeof(ack), 10);
 
     }
 }
@@ -47,16 +50,22 @@ void uart_ctrl_receive(void){
 
 void uart_handle_mess(void){
     if(bDataInProcess){
-        if (strncmp(gUartLineBuffer, "AT+", 3) == 0){
-            AT_Command_t StatusCommnad = identify_command(gUartLineBuffer);
+        if (strncmp(Data_RX, "AT+", 3) == 0){
+            char ack[] = ">>OK\r\n";
+            HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), 10);
+            AT_Command_t StatusCommnad = identify_command(Data_RX);
             switch (StatusCommnad){
             case CMD_ENAADC:
                 bStatusADC  = true;
+                sprintf(gMessRespone, ">>ADC IS ENABLE!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
                 break;
 
             case CMD_DISADC:
                 bStatusADC  = false;
+                sprintf(gMessRespone, ">>ADC IS DISBLE!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
                 break;
 
@@ -66,13 +75,19 @@ void uart_handle_mess(void){
                 break;
 
             default:
+                sprintf(gMessRespone, ">>INVALID COMMAND!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
                 break;
             }
+            return;
 
 
         }else{
+//            sprintf(gMessRespone, "WRONG KEY!\r\n");
+//            HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
             bDataInProcess = false;
+            return;
         }   
     }
 
@@ -86,19 +101,39 @@ void uart_proc_config(void){
 
 AT_Command_t identify_command(const char *cmd)
 {
-    if      (strcmp(cmd, "AT+ENAADC")  == 0) return CMD_ENAADC;
-    else if (strcmp(cmd, "AT+DISADC")  == 0) return CMD_DISADC;
-    else if (strcmp(cmd, "ENAGPS")  == 0) return CMD_ENAGPS;
-    else if (strcmp(cmd, "DISGPS")  == 0) return CMD_DISGPS;
-    else if (strcmp(cmd, "ENARTC")  == 0) return CMD_ENARTC;
-    else if (strcmp(cmd, "DISRTC")  == 0) return CMD_DISRTC;
-    else if (strcmp(cmd, "ENALCD")  == 0) return CMD_ENALCD;
-    else if (strcmp(cmd, "DISLCD")  == 0) return CMD_DISLCD;
-    else if (strcmp(cmd, "ENATEMP") == 0) return CMD_ENATEMP;
-    else if (strcmp(cmd, "DISTEMP") == 0) return CMD_DISTEMP;
-    else if (strcmp(cmd, "CONFIG")  == 0) return CMD_CONFIG;
-    else if (strcmp(cmd, "EXIT")    == 0) return CMD_EXIT;
-    else if (strcmp(cmd, "STATUS")  == 0) return CMD_STATUS;
-    else if (strncmp(cmd, "SET=", 4)== 0) return CMD_SET;
+    if      (strncmp(cmd, "AT+ENAADC",9)  == 0) return CMD_ENAADC;
+    else if (strncmp(cmd, "AT+DISADC",9)  == 0) return CMD_DISADC;
+    else if (strncmp(cmd, "AT+ENAGPS",9)  == 0) return CMD_ENAGPS;
+    else if (strncmp(cmd, "AT+DISGPS",9)  == 0) return CMD_DISGPS;
+    else if (strncmp(cmd, "AT+ENARTC",9)  == 0) return CMD_ENARTC;
+    else if (strncmp(cmd, "AT+DISRTC",9)  == 0) return CMD_DISRTC;
+    else if (strncmp(cmd, "AT+ENALCD",9)  == 0) return CMD_ENALCD;
+    else if (strncmp(cmd, "AT+DISLCD",9)  == 0) return CMD_DISLCD;
+    else if (strncmp(cmd, "AT+ENATEMP",10) == 0) return CMD_ENATEMP;
+    else if (strncmp(cmd, "AT+DISTEMP",10) == 0) return CMD_DISTEMP;
+    else if (strncmp(cmd, "AT+CONFIG",9)  == 0) return CMD_CONFIG;
+    else if (strncmp(cmd, "AT+EXIT",7)    == 0) return CMD_EXIT;
+    else if (strncmp(cmd, "AT+STATUS",8)  == 0) return CMD_STATUS;
+    else if (strncmp(cmd, "AT+SET=",7)== 0) return CMD_SET;
     return CMD_NONE;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+  if (huart->Instance == huart2.Instance)
+  {
+    //HAL_UART_Receive_IT(&huart2, Data_RX, 128);
+        if (gByte == '\r' || gByte == '\n') {
+        Data_RX[Index] = '\0'; 
+        Index = 0;
+        bDataInProcess = true;
+        uart_handle_mess();
+        }
+        else {
+            if (Index < UART_RX_BUFFER_SIZE - 1) {
+                Data_RX[Index++] = gByte;
+            }
+        }
+        HAL_UART_Receive_IT(&huart2, &gByte, 1);
+  }
+  
 }
