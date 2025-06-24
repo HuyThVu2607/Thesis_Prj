@@ -35,6 +35,13 @@ uint8_t Data_RX[128];
 uint8_t gSelectChADC=0;
 float g_voltage[8];
 bool bLiveData = false;
+//Varible control State 
+bool bAnalogEnable       = false;
+bool bGPSEnable          = false;
+bool bDigitalEnable      = false;
+bool bTempHumEnable      = false;
+bool bRTCEnable          = false;
+bool bLogDataToMicroSD   = false;
 
 void Process_Init(void){
     //Init peripheral
@@ -111,15 +118,109 @@ void Process_Init(void){
 
 //Middle system run
 void Process_Run(void){
+    //Get real time clock
+    if(bRTCEnable){
+      //Function get RTC
+
+    }
+    //Get data of analog chanel
+    if(bAnalogEnable){
+      //Function get Analog
+      ads1115_read(gSelectChADC);
+
+    }
+
+    //Get data og digital chanel
+    if(bDigitalEnable){
+      //Function get Digital
+
+    }
+
+    //Get GPS location
+    if(bGPSEnable){
+      //Function get GPS
+
+    }
+
+    // Get Tempeture and Humidity
+    if(bTempHumEnable){
+      //Function get Tempeture and Humidity
+
+    }
+
+    //Save data for micro SD card
+    if (bLogDataToMicroSD)
+    {
+      //Function save data to micro SD card
+
+    }
+    
+
     if(bLiveData){
         char LogMsg[100];
+        sprintf(LogMsg, ">>------------------------------------------------<<\r\n");
+        HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
         sprintf(LogMsg, ">>ADC LIVE DATA!\r\n");
-        HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);          
-        ads1115_read(gSelectChADC);
-        for(int i = 0; i < 8; i++){
-            sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mV\r\n",i,g_voltage[i]);
-            HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);    
+        HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+        
+        //Show RTC
+        if (bRTCEnable)
+        {
+          //Function Show RTC
+
+        }else{
+          sprintf(LogMsg, ">>Real Time Clock None Active!\r\n");
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
         }
+
+        //Show ADC value of chanel
+        if (bAnalogEnable)
+        {
+          for(int i = 0; i < 8; i++){
+              if(g_voltage[i]<=1000){
+                  sprintf(LogMsg, ">>ADC CHANEL%d = None Active\r\n",i,g_voltage[i]);
+                  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+              }else{  
+                  sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mV\r\n",i,g_voltage[i]);
+                  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+              }
+            }
+        }else{
+          sprintf(LogMsg, ">>Analog None Active!\r\n");
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+        }
+
+        //Show Data of digital chanel
+        if (bDigitalEnable)
+        {
+          //Function Show digital
+
+        }else{
+          sprintf(LogMsg, ">>Digital None Active!\r\n");
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+        }
+        
+        //Show GPS location
+        if (bGPSEnable)
+        {
+          //Function Show GPS
+
+        }else{
+          sprintf(LogMsg, ">>GPS None Active!\r\n");
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+        }
+        
+        //Show Temp and Hum
+        if (bTempHumEnable)
+        {
+          //Function Show Tempeture and Humidity
+
+        }else{
+          sprintf(LogMsg, ">>Tempeture and humidity None Active!\r\n");
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+        }
+        sprintf(LogMsg, ">>------------------------------------------------<<\r\n");
+        HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);  
         HAL_Delay(5000);
     }
 }

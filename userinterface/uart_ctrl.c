@@ -19,6 +19,15 @@ volatile        uint8_t Index = 0;
 extern          uint8_t gByte;
 char            gMessRespone[100];
 extern bool     bLiveData;
+
+//Control
+extern bool bAnalogEnable              ;
+extern bool bGPSEnable                 ;
+extern bool bDigitalEnable             ;
+extern bool bTempHumEnable             ;
+extern bool bRTCEnable                 ;
+extern bool bLogDataToMicroSD          ;
+
 void uart_ctrl_receive(void){
     if(!bDataInProcess){
 //        uint8_t lUartDataReceive;
@@ -61,6 +70,7 @@ void uart_handle_mess(void){
                 sscanf((char*)Data_RX, "AT+ENAADC=%hhu", &gSelectChADC);
                 sprintf(gMessRespone, ">>ADC IS ENABLE!\r\n");
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                bAnalogEnable  = true;
                 bDataInProcess = false;
                 break;
 
