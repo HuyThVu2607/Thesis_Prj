@@ -7,6 +7,8 @@
         "type_traits": "c",
         "xutility": "c",
         "stdio.h": "c",
-        "stm32f4xx_hal.h": "c"
+        "stm32f4xx_hal.h": "c",
+        "mcp23008_driver.h": "c",
+        "stdlib.h": "c"
     }
 }

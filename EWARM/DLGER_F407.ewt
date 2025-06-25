@@ -1309,10 +1309,16 @@
             </file>
         </group>
         <group>
-            <name>ExpandIO</name>
+            <name>gps</name>
         </group>
         <group>
-            <name>gps</name>
+            <name>MCP23008</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\mcp23008.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\mcp23008.h</name>
+            </file>
         </group>
         <group>
             <name>microSD</name>

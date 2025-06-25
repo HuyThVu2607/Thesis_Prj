@@ -931,7 +931,7 @@
                     <item>errMsg</item>
                     <item>mess1</item>
                     <item>gSelectChADC</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>
