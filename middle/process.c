@@ -43,6 +43,9 @@ bool bTempHumEnable      = false;
 bool bRTCEnable          = false;
 bool bLogDataToMicroSD   = false;
 
+//Struct MCP23008
+MCP23008_t mcp;
+
 void Process_Init(void){
     //Init peripheral
     HAL_Init();
@@ -110,9 +113,9 @@ void Process_Init(void){
     }
     if(ADS1115_Init_C1(&hi2c2, ADS1115_DATA_RATE_128, ADS1115_PGA_ONE) != HAL_OK){
          gCheckInit = false;
-    } 
-    
-    
+    }
+    //Init ExpandIO MCP23008
+    MCP23008_Init(&mcp, &hi2c2, MCP23008_ADDRESS);
     
 }
 

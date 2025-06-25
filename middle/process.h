@@ -10,6 +10,7 @@
 #include "ff.h"
 #include <stdio.h>
 #include <string.h>
+#include "mcp23008.h"
 //Define
 
 //COMMAND INIT ERROR
