@@ -6,7 +6,7 @@
 #ifndef __RTC_H__
 #define __RTC_H__
 
-#include "stm32f1xx_hal.h"  // Sửa lại theo dòng MCU của bạn (ví dụ: stm32f4xx_hal.h)
+#include "stm32f4xx_hal.h"  // Sửa lại theo dòng MCU của bạn (ví dụ: stm32f4xx_hal.h)
 
 // I2C address of DS3231 (7-bit address shifted for HAL)
 #define DS3231_ADDRESS     (0x68 << 1)

@@ -47,9 +47,11 @@ build stm32f4xx_hal_tim.pbi : index stm32f4xx_hal_tim.xcl
 build stm32f4xx_hal_tim_ex.pbi : index stm32f4xx_hal_tim_ex.xcl
 build stm32f4xx_hal_uart.pbi : index stm32f4xx_hal_uart.xcl
 build ads1115.pbi : index ads1115.xcl
+build button.pbi : index button.xcl
 build mcp23008.pbi : index mcp23008.xcl
 build fatfs_sd.pbi : index fatfs_sd.xcl
 build microsd.pbi : index microsd.xcl
+build rtc.pbi : index rtc.xcl
 build sht31.pbi : index sht31.xcl
 build process.pbi : index process.xcl
 build ccsbcs.pbi : index ccsbcs.xcl
@@ -64,9 +66,9 @@ build DLGER_F407_part0.pbi : link main.pbi stm32f4xx_hal_msp.pbi stm32f4xx_hal_t
 build DLGER_F407_part1.pbi : link system_stm32f4xx.pbi stm32f4xx_hal.pbi stm32f4xx_hal_cortex.pbi stm32f4xx_hal_dma.pbi stm32f4xx_hal_dma_ex.pbi stm32f4xx_hal_exti.pbi
 build DLGER_F407_part2.pbi : link stm32f4xx_hal_flash.pbi stm32f4xx_hal_flash_ex.pbi stm32f4xx_hal_flash_ramfunc.pbi stm32f4xx_hal_gpio.pbi stm32f4xx_hal_i2c.pbi stm32f4xx_hal_i2c_ex.pbi
 build DLGER_F407_part3.pbi : link stm32f4xx_hal_pwr.pbi stm32f4xx_hal_pwr_ex.pbi stm32f4xx_hal_rcc.pbi stm32f4xx_hal_rcc_ex.pbi stm32f4xx_hal_spi.pbi stm32f4xx_hal_tim.pbi
-build DLGER_F407_part4.pbi : link stm32f4xx_hal_tim_ex.pbi stm32f4xx_hal_uart.pbi ads1115.pbi mcp23008.pbi fatfs_sd.pbi microsd.pbi
-build DLGER_F407_part5.pbi : link sht31.pbi process.pbi ccsbcs.pbi diskio.pbi ff.pbi ff_gen_drv.pbi
-build DLGER_F407_part6.pbi : link syscall.pbi ili9341.pbi uart_ctrl.pbi UI_process.pbi
+build DLGER_F407_part4.pbi : link stm32f4xx_hal_tim_ex.pbi stm32f4xx_hal_uart.pbi ads1115.pbi button.pbi mcp23008.pbi fatfs_sd.pbi
+build DLGER_F407_part5.pbi : link microsd.pbi rtc.pbi sht31.pbi process.pbi ccsbcs.pbi diskio.pbi
+build DLGER_F407_part6.pbi : link ff.pbi ff_gen_drv.pbi syscall.pbi ili9341.pbi uart_ctrl.pbi UI_process.pbi
 build DLGER_F407.pbd : link DLGER_F407_part0.pbi DLGER_F407_part1.pbi DLGER_F407_part2.pbi DLGER_F407_part3.pbi DLGER_F407_part4.pbi DLGER_F407_part5.pbi DLGER_F407_part6.pbi
 build DLGER_F407.pbw : browsedata DLGER_F407.pbd
 

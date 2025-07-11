@@ -33,6 +33,3 @@ int main(void)
     }
   /* USER CODE END 3 */
 }
-
-
-
