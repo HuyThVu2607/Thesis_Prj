@@ -1395,10 +1395,22 @@
         <group>
             <name>ILI9341</name>
             <file>
-                <name>$PROJ_DIR$\..\userinterface\ili9341.c</name>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\5x5_font.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\userinterface\ili9341.h</name>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_GFX.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_GFX.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_STM32_Driver.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_STM32_Driver.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\snow_tiger.h</name>
             </file>
         </group>
         <group>

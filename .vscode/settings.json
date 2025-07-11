@@ -9,6 +9,7 @@
         "stdio.h": "c",
         "stm32f4xx_hal.h": "c",
         "mcp23008_driver.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "process.h": "c"
     }
 }

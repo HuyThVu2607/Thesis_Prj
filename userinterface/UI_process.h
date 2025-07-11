@@ -6,6 +6,11 @@
 #include "string.h"
 #include "stdbool.h"
 #include "uart_ctrl.h"
+
+#include "ILI9341_STM32_Driver.h"
+#include "ILI9341_GFX.h"
+
+
 //Define
 #define UART_RX_BUFFER_SIZE 128
 
