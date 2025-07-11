@@ -1192,6 +1192,15 @@
             </file>
         </group>
         <group>
+            <name>button_pwr</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\button.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\button.h</name>
+            </file>
+        </group>
+        <group>
             <name>gps</name>
         </group>
         <group>
@@ -1220,6 +1229,12 @@
         </group>
         <group>
             <name>rtc</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\rtc.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\rtc.h</name>
+            </file>
         </group>
         <group>
             <name>temp</name>

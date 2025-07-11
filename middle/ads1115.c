@@ -50,7 +50,7 @@ uint8_t ADS1115_devAddress1 = 0x49;     // 0b1001001 = 0x49 = 73
 I2C_HandleTypeDef ADS1115_I2C_Handler;	// HAL I2C handler store variable.
 
 uint16_t ADS1115_dataRate = ADS1115_DATA_RATE_128; // Default
-uint16_t ADS1115_pga  =     ADS1115_PGA_TWO; // Default
+uint16_t ADS1115_pga  =     ADS1115_PGA_TWOTHIRDS; // Default
 uint16_t ADS1115_port =     ADS1115_MUX_AIN0; // Default
 
 uint8_t ADS1115_config[2];
@@ -72,7 +72,7 @@ extern float g_voltage[8];
      switch (ADS1115_pga) {
  
      case ADS1115_PGA_TWOTHIRDS:
-         ADS1115_voltCoef = 0.1875;
+         ADS1115_voltCoef = 0.1875*0.666;
          break;
  
      case ADS1115_PGA_ONE:
@@ -172,7 +172,7 @@ HAL_StatusTypeDef ADS1115_readSingleEnded_C0(uint16_t muxPort, float *voltage) {
 
 		if(HAL_I2C_Mem_Read(&ADS1115_I2C_Handler, (uint16_t) ((ADS1115_devAddress0 << 1) | 0x1), ADS1115_CONVER_REG, 1, ADS1115_rawValue, 2, ADS1115_TIMEOUT) == HAL_OK)
 		{
-			*voltage = (float) (((int16_t) (ADS1115_rawValue[0] << 8) | ADS1115_rawValue[1]) * ADS1115_voltCoef);
+			*voltage = (float) (((int16_t) (ADS1115_rawValue[0] << 8) | ADS1115_rawValue[1]) * 0.1875);
 			return HAL_OK;
 
 		}
@@ -204,7 +204,7 @@ HAL_StatusTypeDef ADS1115_readSingleEnded_C0(uint16_t muxPort, float *voltage) {
 
 		if(HAL_I2C_Mem_Read(&ADS1115_I2C_Handler, (uint16_t) ((ADS1115_devAddress1 << 1) | 0x1), ADS1115_CONVER_REG, 1, ADS1115_rawValue, 2, ADS1115_TIMEOUT) == HAL_OK)
 		{
-			*voltage = (float) (((int16_t) (ADS1115_rawValue[0] << 8) | ADS1115_rawValue[1]) * ADS1115_voltCoef);
+			*voltage = (float) (((int16_t) (ADS1115_rawValue[0] << 8) | ADS1115_rawValue[1]) * 0.1875);
 			return HAL_OK;
 
 		}

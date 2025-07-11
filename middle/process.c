@@ -3,7 +3,7 @@
 
 //Global Variable
 volatile bool gCheckInit = true;
-
+volatile uint32_t delayCounter	=	0;
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 
@@ -40,11 +40,20 @@ bool bAnalogEnable       = false;
 bool bGPSEnable          = false;
 bool bDigitalEnable      = false;
 bool bTempHumEnable      = false;
-bool bRTCEnable          = false;
+bool bRTCEnable          = true;
 bool bLogDataToMicroSD   = false;
 
 //Struct MCP23008
 MCP23008_t mcp;
+uint8_t gpio_values=0;
+uint8_t gCheckPin=0;
+//Variable for RTC 
+uint8_t hours, minutes, seconds, day, date, month, year;
+
+//Power system
+SystemState systemState = SYSTEM_ON;
+StateUSB stateUSB = USB_OFF;
+
 
 void Process_Init(void){
     //Init peripheral
@@ -116,6 +125,23 @@ void Process_Init(void){
     }
     //Init ExpandIO MCP23008
     MCP23008_Init(&mcp, &hi2c2, MCP23008_ADDRESS);
+    //Set mcp23008 mode input
+    MCP23008_PinMode(&mcp, 3, 1);  // 1 = INPUT
+    MCP23008_PullUp(&mcp, 3, 1);   //pull up
+
+
+      //Init RTC
+    uint8_t set_hour = 10;
+    uint8_t set_minute = 8;
+    uint8_t set_second = 23;
+    uint8_t set_date = 8;
+    uint8_t set_day = 5;
+    uint8_t set_month = 7;
+    uint8_t set_year = 25;
+
+    RTC_Init(&hi2c1);
+    RTC_SetTime(set_hour, set_minute, set_second, set_date, set_day, set_month, set_year);
+    //Init
     
 }
 
@@ -124,11 +150,12 @@ void Process_Run(void){
     //Get real time clock
     if(bRTCEnable){
       //Function get RTC
-
+      RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
     }
     //Get data of analog chanel
     if(bAnalogEnable){
       //Function get Analog
+      gpio_values = MCP23008_ReadGPIO(&mcp);
       ads1115_read(gSelectChADC);
 
     }
@@ -170,6 +197,8 @@ void Process_Run(void){
         if (bRTCEnable)
         {
           //Function Show RTC
+          snprintf(LogMsg, sizeof(LogMsg), ">>Time: %02d:%02d:%02d %d/%d/%d  \r\n",hours,minutes,seconds,date,month,year);
+				  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), 100);
 
         }else{
           sprintf(LogMsg, ">>Real Time Clock None Active!\r\n");
@@ -178,16 +207,42 @@ void Process_Run(void){
 
         //Show ADC value of chanel
         if (bAnalogEnable)
-        {
-          for(int i = 0; i < 8; i++){
-              if(g_voltage[i]<=1000){
-                  sprintf(LogMsg, ">>ADC CHANEL%d = None Active\r\n",i,g_voltage[i]);
-                  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
-              }else{  
-                  sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mV\r\n",i,g_voltage[i]);
-                  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
-              }
+        {  
+          gCheckPin = gpio_values & 0x08;
+          if (gCheckPin == 0) {
+              g_voltage[0]=g_voltage[0]/1000*2.5-2.5+0.34;  
+              sprintf(LogMsg, ">>ADC CHANEL0 = %.4f V\r\n",g_voltage[0]);
+              HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+          }else{
+              sprintf(LogMsg, ">>ADC CHANEL0 No Input\r\n");
+              HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+          }
+          gCheckPin = gpio_values & 0x04;
+          
+          if (gCheckPin == 0) {
+              g_voltage[1]=g_voltage[1]/1000*2.5-2.5+0.09;  
+              sprintf(LogMsg, ">>ADC CHANEL1 = %.4f V\r\n",g_voltage[1]);
+              HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+          }else{
+              sprintf(LogMsg, ">>ADC CHANEL1 No Input\r\n");
+              HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+          }
+           
+          for(int i = 2; i < 4; i++){
+              g_voltage[i]=g_voltage[i]/1000+0.1;  
+              sprintf(LogMsg, ">>ADC CHANEL%d = %.4f V\r\n",i,g_voltage[i]);
+              HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
             }
+
+          for(int i = 4; i < 8; i++){
+              g_voltage[i]=g_voltage[i]/250;
+              sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mA\r\n",i,g_voltage[i]);
+              HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+            }   
+          //Chanel 8 Error  
+//          sprintf(LogMsg, ">>ADC CHANEL7 = None Active\r\n");
+//          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY); 
+          
         }else{
           sprintf(LogMsg, ">>Analog None Active!\r\n");
           HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
@@ -224,8 +279,105 @@ void Process_Run(void){
         }
         sprintf(LogMsg, ">>------------------------------------------------<<\r\n");
         HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);  
-        HAL_Delay(5000);
+        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
+        HAL_Delay(1000);
     }
+}
+
+
+void EXTI15_10_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  uint16_t debounceCounter = 0;
+  uint16_t eventProcessed = 0;
+  char messPWR[40];
+    //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
+    
+    if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_15) == GPIO_PIN_SET){
+        stateUSB = USB_ON;
+        //CDC_Transmit_FS((uint8_t*)"USB Connect!\r\n", 20);
+    }
+		
+		
+    /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+    // Power ON!
+    while(systemState == SYSTEM_OFF && eventProcessed == 0)
+    {
+        while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_12) == GPIO_PIN_RESET)
+        {
+            debounceCounter++;
+            if(debounceCounter > 4)
+            {
+                //CDC_Transmit_FS((uint8_t*)"Power ON!\r\n", 11);
+                sprintf(messPWR, ">>POWER ON!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)messPWR, strlen(messPWR), HAL_MAX_DELAY);
+                HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_SET);
+                systemState = SYSTEM_ON;
+                uint8_t toggleLoop = 0;
+
+                while(toggleLoop < LED_BLINK_COUNT)
+                {
+                    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
+                    delayCounter = 0;
+                    while(delayCounter < SHORT_DELAY_ITR_MS)
+                    {
+                        delayCounter++;
+                    }
+                    toggleLoop++;
+                }
+            }
+            delayCounter = 0;
+            while(delayCounter < LONG_DELAY_ITR_MS)
+            {
+                delayCounter++;
+            }
+        }
+        eventProcessed = 1;
+    }
+    
+    // Power OFF!
+    while(systemState == SYSTEM_ON && eventProcessed == 0)
+    {
+        while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_12) == GPIO_PIN_RESET)
+        {
+            debounceCounter++;
+            if(debounceCounter > 4)
+            {
+                //CDC_Transmit_FS((uint8_t*)"Power ON!\r\n", 11);
+                //HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_RESET);
+                sprintf(messPWR, ">>POWER OFF!\r\n");
+                HAL_UART_Transmit(&huart2, (uint8_t*)messPWR, strlen(messPWR), HAL_MAX_DELAY);
+                systemState = SYSTEM_ON;
+                uint8_t toggleLoop = 0;
+
+                while(toggleLoop < LED_BLINK_COUNT)
+                {
+                    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
+                    delayCounter = 0;
+                    while(delayCounter < SHORT_DELAY_ITR_MS)
+                    {
+                        delayCounter++;
+                    }
+                    toggleLoop++;
+                }
+				HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_RESET);
+            }
+            delayCounter = 0;
+            while(delayCounter < LONG_DELAY_ITR_MS)
+            {
+                delayCounter++;
+            }
+        }
+        eventProcessed = 1;
+    }
+
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 
@@ -506,10 +658,11 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10
-                          |GPIO_PIN_0, GPIO_PIN_RESET);
+                          , GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
@@ -550,7 +703,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PA12 PA15 */
   GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_15;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -585,6 +738,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

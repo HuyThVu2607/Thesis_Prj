@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "mcp23008.h"
+#include "rtc.h"
+#include "button.h"
+
 //Define
 
 //COMMAND INIT ERROR
@@ -29,6 +32,19 @@ typedef enum{
     CMD_LIVE_END        ,
     CMD_LIVE_DIS        
 }eControlSys;
+
+typedef enum {
+    SYSTEM_OFF = 0,
+    SYSTEM_ON  = 1
+} SystemState;
+
+typedef enum {
+    USB_OFF = 0,
+    USB_ON  = 1
+} StateUSB;
+
+extern SystemState systemState;
+extern StateUSB stateUSB;
 
 void Process_Init(void);
 void Process_Run(void);
