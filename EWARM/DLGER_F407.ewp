@@ -362,6 +362,7 @@
                     <state>$PROJ_DIR$/../Middlewares/Third_Party/FatFs/src</state>
                     <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\microSD</state>
                     <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\ExpanderIO</state>
+                    <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\userinterface\ili9341</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1278,10 +1279,22 @@
         <group>
             <name>ILI9341</name>
             <file>
-                <name>$PROJ_DIR$\..\userinterface\ili9341.c</name>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\5x5_font.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\userinterface\ili9341.h</name>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_GFX.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_GFX.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_STM32_Driver.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\ILI9341_STM32_Driver.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\userinterface\ili9341\snow_tiger.h</name>
             </file>
         </group>
         <group>

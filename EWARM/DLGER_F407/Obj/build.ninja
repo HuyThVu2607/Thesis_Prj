@@ -59,16 +59,17 @@ build diskio.pbi : index diskio.xcl
 build ff.pbi : index ff.xcl
 build ff_gen_drv.pbi : index ff_gen_drv.xcl
 build syscall.pbi : index syscall.xcl
-build ili9341.pbi : index ili9341.xcl
+build ILI9341_GFX.pbi : index ILI9341_GFX.xcl
+build ILI9341_STM32_Driver.pbi : index ILI9341_STM32_Driver.xcl
 build uart_ctrl.pbi : index uart_ctrl.xcl
 build UI_process.pbi : index UI_process.xcl
-build DLGER_F407_part0.pbi : link main.pbi stm32f4xx_hal_msp.pbi stm32f4xx_hal_timebase_tim.pbi stm32f4xx_it.pbi fatfs.pbi user_diskio.pbi
-build DLGER_F407_part1.pbi : link system_stm32f4xx.pbi stm32f4xx_hal.pbi stm32f4xx_hal_cortex.pbi stm32f4xx_hal_dma.pbi stm32f4xx_hal_dma_ex.pbi stm32f4xx_hal_exti.pbi
-build DLGER_F407_part2.pbi : link stm32f4xx_hal_flash.pbi stm32f4xx_hal_flash_ex.pbi stm32f4xx_hal_flash_ramfunc.pbi stm32f4xx_hal_gpio.pbi stm32f4xx_hal_i2c.pbi stm32f4xx_hal_i2c_ex.pbi
-build DLGER_F407_part3.pbi : link stm32f4xx_hal_pwr.pbi stm32f4xx_hal_pwr_ex.pbi stm32f4xx_hal_rcc.pbi stm32f4xx_hal_rcc_ex.pbi stm32f4xx_hal_spi.pbi stm32f4xx_hal_tim.pbi
-build DLGER_F407_part4.pbi : link stm32f4xx_hal_tim_ex.pbi stm32f4xx_hal_uart.pbi ads1115.pbi button.pbi mcp23008.pbi fatfs_sd.pbi
-build DLGER_F407_part5.pbi : link microsd.pbi rtc.pbi sht31.pbi process.pbi ccsbcs.pbi diskio.pbi
-build DLGER_F407_part6.pbi : link ff.pbi ff_gen_drv.pbi syscall.pbi ili9341.pbi uart_ctrl.pbi UI_process.pbi
+build DLGER_F407_part0.pbi : link main.pbi stm32f4xx_hal_msp.pbi stm32f4xx_hal_timebase_tim.pbi stm32f4xx_it.pbi fatfs.pbi user_diskio.pbi system_stm32f4xx.pbi
+build DLGER_F407_part1.pbi : link stm32f4xx_hal.pbi stm32f4xx_hal_cortex.pbi stm32f4xx_hal_dma.pbi stm32f4xx_hal_dma_ex.pbi stm32f4xx_hal_exti.pbi stm32f4xx_hal_flash.pbi stm32f4xx_hal_flash_ex.pbi
+build DLGER_F407_part2.pbi : link stm32f4xx_hal_flash_ramfunc.pbi stm32f4xx_hal_gpio.pbi stm32f4xx_hal_i2c.pbi stm32f4xx_hal_i2c_ex.pbi stm32f4xx_hal_pwr.pbi stm32f4xx_hal_pwr_ex.pbi stm32f4xx_hal_rcc.pbi
+build DLGER_F407_part3.pbi : link stm32f4xx_hal_rcc_ex.pbi stm32f4xx_hal_spi.pbi stm32f4xx_hal_tim.pbi stm32f4xx_hal_tim_ex.pbi stm32f4xx_hal_uart.pbi ads1115.pbi button.pbi
+build DLGER_F407_part4.pbi : link mcp23008.pbi fatfs_sd.pbi microsd.pbi rtc.pbi sht31.pbi process.pbi ccsbcs.pbi
+build DLGER_F407_part5.pbi : link diskio.pbi ff.pbi ff_gen_drv.pbi syscall.pbi ILI9341_GFX.pbi ILI9341_STM32_Driver.pbi uart_ctrl.pbi
+build DLGER_F407_part6.pbi : link UI_process.pbi
 build DLGER_F407.pbd : link DLGER_F407_part0.pbi DLGER_F407_part1.pbi DLGER_F407_part2.pbi DLGER_F407_part3.pbi DLGER_F407_part4.pbi DLGER_F407_part5.pbi DLGER_F407_part6.pbi
 build DLGER_F407.pbw : browsedata DLGER_F407.pbd
 
