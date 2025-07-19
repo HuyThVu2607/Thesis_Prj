@@ -28,6 +28,15 @@ extern bool bTempHumEnable             ;
 extern bool bRTCEnable                 ;
 extern bool bLogDataToMicroSD          ;
 
+extern uint16_t gLowThresHold[8];
+extern uint16_t gHighThresHold[8];
+extern uint8_t  gUnit[8];
+uint16_t        gAddressEE;
+uint8_t         BufferSave[2];  
+uint8_t         ChanelSelect =0;
+bool            bIsConfig = false;
+bool            bIsSelect = false;
+
 void uart_ctrl_receive(void){
     if(!bDataInProcess){
 //        uint8_t lUartDataReceive;
@@ -57,6 +66,14 @@ void uart_ctrl_receive(void){
     }
 }
 
+void uart_proc_config(void) {
+    char resp[128];
+    bLiveData = false;
+    bIsConfig = true;
+    sprintf(resp, ">>Please select channel config\r\n");
+    HAL_UART_Transmit(&huart2, (uint8_t*)resp, strlen(resp), HAL_MAX_DELAY);
+}
+
 
 void uart_handle_mess(void){
     if(bDataInProcess){
@@ -65,6 +82,7 @@ void uart_handle_mess(void){
             HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), 10);
             AT_Command_t StatusCommnad = identify_command(Data_RX);
             switch (StatusCommnad){
+
             case CMD_ENAADC:       
                 bStatusADC  = true;
                 sscanf((char*)Data_RX, "AT+ENAADC=%hhu", &gSelectChADC);
@@ -80,22 +98,68 @@ void uart_handle_mess(void){
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
                 break;
+
             case CMD_LIVEDATA:
                 bLiveData = true;
                 sprintf(gMessRespone, ">>LIVEDATA IS ENABLE!\r\n");
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;              
-                break;  
+                break; 
+
             case CMD_DISLIVEDATA:
                 bLiveData = false;
                 sprintf(gMessRespone, ">>LIVEDATA IS DISBLE!\r\n");
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;              
-                break;  
+                break; 
+
             case CMD_CONFIG:
                 uart_proc_config();
 
                 break;
+
+            case CMD_SELECT: 
+                if(bIsConfig){
+                    sscanf((char*)Data_RX, "AT+SELECT=%d", &ChanelSelect);
+                    if (ChanelSelect < 1 || ChanelSelect > 8 ) {
+                        sprintf(gMessRespone, ">>FAIL\r\n");
+                    } else {
+                        sprintf(gMessRespone, ">>Your select is chanel %d\r\n >>Please set range according A-->B!\r\n",ChanelSelect);
+                        ChanelSelect = ChanelSelect - 1;
+                    }
+                    HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                    bIsSelect = true;
+                }
+                bDataInProcess = false;
+                break;
+            
+            case CMD_SETA:
+                if(bIsSelect){
+                    sscanf((char*)Data_RX, "AT+SETA=%d", &gLowThresHold[ChanelSelect]);
+                    // gAddressEE = Get_Address_EEPROM(ChanelSelect);
+                    // BufferSave[0] = (gLowThresHold[ChanelSelect] >> 8) & 0xFF;           // High byte   
+                    // BufferSave[1] = gLowThresHold[ChanelSelect] & 0xFF;                  // High byte 
+                    // prj_eeprom_24lc256_write_bytes(gAddressEE, BufferSave, strlen((char*)BufferSave));
+                    sprintf(gMessRespone, ">>Config Chanel %d A = %d\r\n",ChanelSelect, gLowThresHold[ChanelSelect]);
+                    HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                }
+                bDataInProcess = false;
+                break;
+
+            case CMD_SETB:
+                if(bIsSelect){
+                    sscanf((char*)Data_RX, "AT+SETB=%d", &gHighThresHold[ChanelSelect]);
+                    // gAddressEE = Get_Address_EEPROM(ChanelSelect)+2;
+                    // BufferSave[0] = (gHighThresHold[ChanelSelect] >> 8) & 0xFF;           // High byte   
+                    // BufferSave[1] = gHighThresHold[ChanelSelect] & 0xFF;                  // High byte 
+                    // prj_eeprom_24lc256_write_bytes(gAddressEE, BufferSave, strlen((char*)BufferSave));
+                    sprintf(gMessRespone, ">>Config Chanel %d B = %d\r\n",ChanelSelect, gHighThresHold[ChanelSelect]);
+                    HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                    bIsSelect = false;
+                }
+                bDataInProcess = false;
+                break;
+
 
             default:
                 sprintf(gMessRespone, ">>INVALID COMMAND!\r\n");
@@ -116,11 +180,6 @@ void uart_handle_mess(void){
 
 }
 
-void uart_proc_config(void){
-
-
-    bDataInProcess = false;
-}
 
 AT_Command_t identify_command(const char *cmd)
 {
@@ -140,7 +199,45 @@ AT_Command_t identify_command(const char *cmd)
     else if (strncmp(cmd, "AT+EXIT",7)    == 0) return CMD_EXIT;
     else if (strncmp(cmd, "AT+STATUS",8)  == 0) return CMD_STATUS;
     else if (strncmp(cmd, "AT+SET=",7)== 0) return CMD_SET;
+    else if (strncmp(cmd, "AT+SETA=",8)== 0) return CMD_SETA;
+    else if (strncmp(cmd, "AT+SETB=",8)== 0) return CMD_SETB;
+    else if (strncmp(cmd, "AT+SELECT=",10)== 0) return CMD_SELECT;
     return CMD_NONE;
+}
+
+uint16_t Get_Address_EEPROM(uint8_t Select){
+    switch (Select)
+    {
+    case 0:
+        return 0x10;
+        break;
+    case 1:
+        return 0x20;
+        break;
+    case 2:
+        return 0x30;
+        break;
+    case 3:
+        return 0x40;
+        break;
+    case 4:
+        return 0x50;
+        break;
+    case 5:
+        return 0x60;
+        break;
+    case 6:
+        return 0x70;
+        break;
+    case 7:
+        return 0x80;
+        break;       
+    
+    default:
+        return 0x00;
+        break;
+    }
+
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){

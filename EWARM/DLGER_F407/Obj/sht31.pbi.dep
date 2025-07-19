@@ -1,6 +1,7 @@
 sht31.pbi: \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle\sht31.c \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/SHT31.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/sht31.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/process.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Core/Inc\stm32f4xx_hal_conf.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_rcc.h \
@@ -41,6 +42,26 @@ sht31.pbi: \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_tim.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_uart.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Core/Inc\main.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/ads1115.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../FATFS/App\fatfs.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src\ff.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src/integer.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../FATFS/Target\ffconf.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdlib.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product_stdlib.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src\ff_gen_drv.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src/diskio.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../Middlewares/Third_Party/FatFs/src/ff.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\EWARM/../FATFS/Target\user_diskio.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdio.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\string.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product_string.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/mcp23008.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/rtc.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/button.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/24lc256.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/convert.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdbool.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\math.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_float_setup.h

@@ -1,0 +1,9 @@
+convert.pbi: \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle\convert.c \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/convert.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdint.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ycheck.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\yvals.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Defaults.h \
+  C:\\Program\ Files\ (x86)\\IAR\ Systems\\Embedded\ Workbench\ 8.3\\arm\\inc\\c\\DLib_Config_Full.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product.h

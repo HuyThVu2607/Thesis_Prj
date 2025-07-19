@@ -60,4 +60,6 @@ button.pbi: \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\string.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product_string.h \
   C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/mcp23008.h \
-  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/rtc.h
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/rtc.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/24lc256.h \
+  C:\Users\huyvu\OneDrive\ -\ hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle/convert.h
