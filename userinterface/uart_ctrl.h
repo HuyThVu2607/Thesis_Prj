@@ -7,6 +7,7 @@
 #include "stm32f4xx_it.h"
 #include "stdbool.h"
 #include "stdio.h"
+#include "24lc256.h"
 //Define
 #define UART_RX_BUFFER_SIZE 128
 
@@ -29,7 +30,12 @@ typedef enum {
     CMD_LIVEDATA        ,
     CMD_DISLIVEDATA     ,
     CMD_GETDATA         ,
-    CMD_SET
+    CMD_SELECT          ,
+    CMD_FORMULER        ,
+    CMD_UNIT            ,
+    CMD_SET             ,
+    CMD_SETA            ,
+    CMD_SETB
 } AT_Command_t;
 
 //Function
@@ -37,6 +43,7 @@ typedef enum {
 void uart_ctrl_receive(void);
 void uart_handle_mess(void);
 void uart_proc_config(void);
+uint16_t Get_Address_EEPROM(uint8_t Select);
 AT_Command_t identify_command(const char *cmd);
 
 

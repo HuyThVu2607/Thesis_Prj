@@ -1300,6 +1300,15 @@
     <group>
         <name>Middle</name>
         <group>
+            <name>24lc256</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\24lc256.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\24lc256.h</name>
+            </file>
+        </group>
+        <group>
             <name>adc</name>
             <file>
                 <name>$PROJ_DIR$\..\middle\ads1115.c</name>
@@ -1315,6 +1324,15 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\middle\button.h</name>
+            </file>
+        </group>
+        <group>
+            <name>convert</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\convert.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\convert.h</name>
             </file>
         </group>
         <group>

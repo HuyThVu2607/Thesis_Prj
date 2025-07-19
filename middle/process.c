@@ -32,17 +32,31 @@ uint32_t totalSpace, freeSpace;
 char buffer[100];
 uint8_t gByte;
 uint8_t Data_RX[128];
-uint8_t gSelectChADC=0;
+uint8_t gSelectChADC=255;
 float g_voltage[8];
-bool bLiveData = false;
+uint32_t gDigital[4];
+bool bLiveData = true;
+
+
+//Config
+uint16_t gLowThresHold[8];
+uint16_t gHighThresHold[8];
+
+uint16_t gLowThresHoldApply[8];
+uint16_t gHighThresHoldApply[8];
+
+
+uint8_t  gUnit[8];
+
 //Varible control State 
-bool bAnalogEnable       = false;
+bool bAnalogEnable       = true;
 bool bGPSEnable          = false;
 bool bDigitalEnable      = false;
-bool bTempHumEnable      = false;
+bool bTempHumEnable      = true;
 bool bRTCEnable          = true;
 bool bLogDataToMicroSD   = false;
 
+bool bIsSave             = false;
 //Struct MCP23008
 MCP23008_t mcp;
 uint8_t gpio_values=0;
@@ -50,10 +64,22 @@ uint8_t gCheckPin=0;
 //Variable for RTC 
 uint8_t hours, minutes, seconds, day, date, month, year;
 
+//Variable for SHT31
+float gTemperature, gHumidity;
+
+//Variable for EEPROM
+uint8_t write_data[] = "Hello EADCOM";
+uint8_t read_data[300] = {0};
+uint8_t gCheckData[8];
+uint8_t gGetData[2];
+uint16_t gAddressGet;
 //Power system
 SystemState systemState = SYSTEM_ON;
 StateUSB stateUSB = USB_OFF;
 
+//Send data to esp32
+char uart_buf_esp32[256];
+uint8_t gCounterSendEsp32 =0;
 
 void Process_Init(void){
     //Init peripheral
@@ -131,23 +157,67 @@ void Process_Init(void){
 
 
       //Init RTC
-    uint8_t set_hour = 10;
-    uint8_t set_minute = 8;
-    uint8_t set_second = 23;
-    uint8_t set_date = 8;
-    uint8_t set_day = 5;
-    uint8_t set_month = 7;
-    uint8_t set_year = 25;
+//    uint8_t set_hour = 1;
+//    uint8_t set_minute = 15;
+//    uint8_t set_second = 23;
+//    uint8_t set_date = 8;
+//    uint8_t set_day = 13;
+//    uint8_t set_month = 7;
+//    uint8_t set_year = 25;
 
     RTC_Init(&hi2c1);
-    RTC_SetTime(set_hour, set_minute, set_second, set_date, set_day, set_month, set_year);
+    //RTC_SetTime(set_hour, set_minute, set_second, set_date, set_day, set_month, set_year);
     //Init
+    
+    //Init EEPROM
+//     uint8_t erease = 0xFF;
+//     for(int i = 0; i<400; i++){
+//         prj_eeprom_24lc256_write_bytes(i, &erease, 1);
+//     }
+//    prj_eeprom_24lc256_read_bytes(0x0000, read_data, 300);
+    for (int i = 0; i < 8; i++)
+    {
+        gAddressGet = 10 + 10*i;
+        prj_eeprom_24lc256_read_bytes(gAddressGet, gGetData, 2);
+        gLowThresHoldApply[i] = ((uint16_t)gGetData[0] << 8) | gGetData[1];
+        HAL_Delay(10);
+        gAddressGet = gAddressGet + 2;
+        prj_eeprom_24lc256_read_bytes(gAddressGet, gGetData, 2);
+        gHighThresHoldApply[i] = ((uint16_t)gGetData[0] << 8) | gGetData[1];
+        HAL_Delay(10);
+    }
+    
     
 }
 
+uint16_t TestBuffer=2212;
+uint8_t  gBuffer[2];
+uint8_t  gBuffer1[2];
+uint16_t  AddressCH;
+uint8_t  Results;
 //Middle system run
 void Process_Run(void){
     //Get real time clock
+    //prj_eeprom_24lc256_write_bytes(AddressTest, gBuffer, strlen((char*)gBuffer));
+    for(int i=0; i<8; i++){
+          if(gLowThresHold[i]!=0){
+                gBuffer[0] = (gLowThresHold[i] >> 8) & 0xFF;                  // High byte   
+                gBuffer[1] = gLowThresHold[i] & 0xFF;                         // High byte 
+                gLowThresHold[i] =0;
+                AddressCH = 10 +i*10;
+                prj_eeprom_24lc256_write_bytes(AddressCH, gBuffer, 2);
+          }
+          
+          if(gHighThresHold[i]!=0){
+                gBuffer1[0] = (gHighThresHold[i] >> 8) & 0xFF;                  // High byte   
+                gBuffer1[1] = gHighThresHold[i] & 0xFF;                         // High byte 
+                gHighThresHold[i] =0;
+                AddressCH = 12 +i*10;
+                prj_eeprom_24lc256_write_bytes(AddressCH, gBuffer1, 2);
+          }
+    }
+//    prj_eeprom_24lc256_read_bytes(0x10, gCheckData, 8);
+//    Results = gCheckData[0];
     if(bRTCEnable){
       //Function get RTC
       RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
@@ -169,13 +239,12 @@ void Process_Run(void){
     //Get GPS location
     if(bGPSEnable){
       //Function get GPS
-
     }
 
     // Get Tempeture and Humidity
     if(bTempHumEnable){
       //Function get Tempeture and Humidity
-
+        SHT31_GetTempAndHumidity(&gTemperature, &gHumidity);
     }
 
     //Save data for micro SD card
@@ -198,7 +267,7 @@ void Process_Run(void){
         {
           //Function Show RTC
           snprintf(LogMsg, sizeof(LogMsg), ">>Time: %02d:%02d:%02d %d/%d/%d  \r\n",hours,minutes,seconds,date,month,year);
-				  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), 100);
+		      HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), 100);
 
         }else{
           sprintf(LogMsg, ">>Real Time Clock None Active!\r\n");
@@ -210,32 +279,50 @@ void Process_Run(void){
         {  
           gCheckPin = gpio_values & 0x08;
           if (gCheckPin == 0) {
-              g_voltage[0]=g_voltage[0]/1000*2.5-2.5+0.34;  
+              g_voltage[0]=g_voltage[0]/1000*2.5-2.5+0.34;
+              if (gLowThresHoldApply[0]!=0xFFFF && gHighThresHoldApply[0]!=0xFFFF)
+              {
+                g_voltage[0] = Convert_To_Engineering_Value(SIGNAL_0_10V, g_voltage[0], gLowThresHoldApply[0], gHighThresHoldApply[0]);
+              }       
               sprintf(LogMsg, ">>ADC CHANEL0 = %.4f V\r\n",g_voltage[0]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
           }else{
+              g_voltage[0]= -1;
               sprintf(LogMsg, ">>ADC CHANEL0 No Input\r\n");
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
           }
           gCheckPin = gpio_values & 0x04;
           
           if (gCheckPin == 0) {
-              g_voltage[1]=g_voltage[1]/1000*2.5-2.5+0.09;  
+              g_voltage[1]=g_voltage[1]/1000*2.5-2.5+0.09;
+              if (gLowThresHoldApply[1]!=0xFFFF && gHighThresHoldApply[1]!=0xFFFF)
+              {
+                g_voltage[0] = Convert_To_Engineering_Value(SIGNAL_0_10V, g_voltage[1], gLowThresHoldApply[1], gHighThresHoldApply[1]);
+              }    
               sprintf(LogMsg, ">>ADC CHANEL1 = %.4f V\r\n",g_voltage[1]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
           }else{
+              g_voltage[1]= -1;
               sprintf(LogMsg, ">>ADC CHANEL1 No Input\r\n");
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
           }
            
           for(int i = 2; i < 4; i++){
-              g_voltage[i]=g_voltage[i]/1000+0.1;  
+              g_voltage[i]=g_voltage[i]/1000+0.1;
+              if (gLowThresHoldApply[i]!=0xFFFF && gHighThresHoldApply[i]!=0xFFFF)
+              {
+                g_voltage[i] = Convert_To_Engineering_Value(SIGNAL_0_5V, g_voltage[i], gLowThresHoldApply[i], gHighThresHoldApply[i]);
+              }   
               sprintf(LogMsg, ">>ADC CHANEL%d = %.4f V\r\n",i,g_voltage[i]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
             }
 
           for(int i = 4; i < 8; i++){
               g_voltage[i]=g_voltage[i]/250;
+              if (gLowThresHoldApply[i]!=0xFFFF && gHighThresHoldApply[i]!=0xFFFF)
+              {
+                g_voltage[i] = Convert_To_Engineering_Value(SIGNAL_4_20mA, g_voltage[i], gLowThresHoldApply[i], gHighThresHoldApply[i]);
+              }   
               sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mA\r\n",i,g_voltage[i]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
             }   
@@ -272,6 +359,8 @@ void Process_Run(void){
         if (bTempHumEnable)
         {
           //Function Show Tempeture and Humidity
+          sprintf(LogMsg, ">>Tempeture = %.2f*C -- Humidity = %.2f % \r\n",gTemperature, gHumidity);
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);          
 
         }else{
           sprintf(LogMsg, ">>Tempeture and humidity None Active!\r\n");
@@ -279,9 +368,22 @@ void Process_Run(void){
         }
         sprintf(LogMsg, ">>------------------------------------------------<<\r\n");
         HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);  
-        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
-        HAL_Delay(1000);
+        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);  
     }
+    if(gCounterSendEsp32==5){
+        sprintf(uart_buf_esp32,
+        "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d,%d,%.1f,%.1f,%d,%d,%d,%d,%d,%d\n",
+        g_voltage[0], g_voltage[1], g_voltage[2], g_voltage[3], g_voltage[4], g_voltage[5], g_voltage[6], g_voltage[7],
+        gDigital[0], gDigital[1], gDigital[2], gDigital[3],
+        gTemperature, gHumidity,
+        year+2000, month, date, hours, minutes, seconds);
+        HAL_UART_Transmit(&huart3, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
+        gCounterSendEsp32=0;
+        //HAL_UART_Transmit(&huart2, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
+    }
+    gCounterSendEsp32++;
+    HAL_Delay(1000);
+
 }
 
 

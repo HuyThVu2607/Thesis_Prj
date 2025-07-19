@@ -363,6 +363,7 @@
                     <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\microSD</state>
                     <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_June.21.2025\Thesis_Prj\ExpanderIO</state>
                     <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\userinterface\ili9341</state>
+                    <state>C:\Users\huyvu\OneDrive - hcmut.edu.vn\Desktop\Do2\Firmware\DLGER_F407_July.5.2025\Thesis_Prj\middle</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1184,6 +1185,15 @@
     <group>
         <name>Middle</name>
         <group>
+            <name>24lc256</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\24lc256.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\24lc256.h</name>
+            </file>
+        </group>
+        <group>
             <name>adc</name>
             <file>
                 <name>$PROJ_DIR$\..\middle\ads1115.c</name>
@@ -1199,6 +1209,15 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\middle\button.h</name>
+            </file>
+        </group>
+        <group>
+            <name>convert</name>
+            <file>
+                <name>$PROJ_DIR$\..\middle\convert.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\middle\convert.h</name>
             </file>
         </group>
         <group>
