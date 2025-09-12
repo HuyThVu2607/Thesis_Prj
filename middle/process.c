@@ -26,8 +26,10 @@ static void MX_USART3_UART_Init(void);
 FATFS fs;
 FATFS *pfs;
 FIL fil;
+FIL fil1;
 FRESULT fres;
 DWORD fre_clust;
+UINT bw;
 uint32_t totalSpace, freeSpace;
 char buffer[100];
 uint8_t gByte;
@@ -45,7 +47,7 @@ uint16_t gHighThresHold[8];
 uint16_t gLowThresHoldApply[8];
 uint16_t gHighThresHoldApply[8];
 
-
+uint16_t gCounterFS = 0;
 uint8_t  gUnit[8];
 
 //Varible control State 
@@ -80,7 +82,11 @@ StateUSB stateUSB = USB_OFF;
 //Send data to esp32
 char uart_buf_esp32[256];
 uint8_t gCounterSendEsp32 =0;
+char log_filename[64];
 
+//MicroSD 
+uint32_t gFreeSpace =0;
+uint16_t gCounterLogSD =0;
 void Process_Init(void){
     //Init peripheral
     HAL_Init();
@@ -93,11 +99,11 @@ void Process_Init(void){
     MX_USART2_UART_Init();
     MX_USART3_UART_Init();
     MX_FATFS_Init();
-    HAL_Delay(500);
+    HAL_Delay(100);
 
     //For test SD card
     /* Mount SD Card */
-//	fres =f_mount(&fs, "", 0);
+	fres =f_mount(&fs, "", 0);
 //
 //	/* Open file to write */
 //	fres = f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
@@ -156,7 +162,7 @@ void Process_Init(void){
     MCP23008_PullUp(&mcp, 3, 1);   //pull up
 
 
-      //Init RTC
+      //Init RTC & Set time
 //    uint8_t set_hour = 1;
 //    uint8_t set_minute = 15;
 //    uint8_t set_second = 23;
@@ -169,12 +175,13 @@ void Process_Init(void){
     //RTC_SetTime(set_hour, set_minute, set_second, set_date, set_day, set_month, set_year);
     //Init
     
-    //Init EEPROM
+    //Clear EEPROM
 //     uint8_t erease = 0xFF;
 //     for(int i = 0; i<400; i++){
 //         prj_eeprom_24lc256_write_bytes(i, &erease, 1);
 //     }
 //    prj_eeprom_24lc256_read_bytes(0x0000, read_data, 300);
+    
     for (int i = 0; i < 8; i++)
     {
         gAddressGet = 10 + 10*i;
@@ -186,15 +193,34 @@ void Process_Init(void){
         gHighThresHoldApply[i] = ((uint16_t)gGetData[0] << 8) | gGetData[1];
         HAL_Delay(10);
     }
+
+    //Greate MicroSD
+    //RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
+    // sprintf((char *)log_filename, "log_%04d%02d%02d_%02d%02d%02d.csv", year+2000, month, date, hours, minutes, seconds);
     
+    // fres = f_mount(&fs, "", 1);
+
+    // if (fres != FR_OK) {
+    //     printf("Mount failed: %d\r\n", fres);
+    //     return;
+    // }
+    // fres = f_open(&fil, (char *)log_filename, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+    // if (fres == FR_OK) {
+    //     f_puts("Analog1,Analog2,Analog3,Analog4,Analog5,Analog6,Analog7,Analog8,Digital1,Digital2,Digital3,Digital4,Temp,Humid,Year,Month,Date,Hour,Min,Sec\n", &fil);
+    //     //f_close(&fil);
+    // } else {
+    //     printf("File create failed: %d\r\n", fres);
+    // }
+    // //fres = f_mount(NULL, "", 1);
     
 }
 
-uint16_t TestBuffer=2212;
+
 uint8_t  gBuffer[2];
 uint8_t  gBuffer1[2];
 uint16_t  AddressCH;
 uint8_t  Results;
+
 //Middle system run
 void Process_Run(void){
     //Get real time clock
@@ -305,6 +331,7 @@ void Process_Run(void){
               g_voltage[1]= -1;
               sprintf(LogMsg, ">>ADC CHANEL1 No Input\r\n");
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+              
           }
            
           for(int i = 2; i < 4; i++){
@@ -315,6 +342,7 @@ void Process_Run(void){
               }   
               sprintf(LogMsg, ">>ADC CHANEL%d = %.4f V\r\n",i,g_voltage[i]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+              //HAL_UART_Transmit(&huart1, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
             }
 
           for(int i = 4; i < 8; i++){
@@ -325,6 +353,7 @@ void Process_Run(void){
               }   
               sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mA\r\n",i,g_voltage[i]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+              //HAL_UART_Transmit(&huart1, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
             }   
           //Chanel 8 Error  
 //          sprintf(LogMsg, ">>ADC CHANEL7 = None Active\r\n");
@@ -343,6 +372,7 @@ void Process_Run(void){
         }else{
           sprintf(LogMsg, ">>Digital None Active!\r\n");
           HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+          //HAL_UART_Transmit(&huart1, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
         }
         
         //Show GPS location
@@ -360,7 +390,8 @@ void Process_Run(void){
         {
           //Function Show Tempeture and Humidity
           sprintf(LogMsg, ">>Tempeture = %.2f*C -- Humidity = %.2f % \r\n",gTemperature, gHumidity);
-          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);          
+          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);    
+          //HAL_UART_Transmit(&huart1, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
 
         }else{
           sprintf(LogMsg, ">>Tempeture and humidity None Active!\r\n");
@@ -370,6 +401,7 @@ void Process_Run(void){
         HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);  
         HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);  
     }
+
     if(gCounterSendEsp32==5){
         sprintf(uart_buf_esp32,
         "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d,%d,%.1f,%.1f,%d,%d,%d,%d,%d,%d\n",
@@ -378,8 +410,32 @@ void Process_Run(void){
         gTemperature, gHumidity,
         year+2000, month, date, hours, minutes, seconds);
         HAL_UART_Transmit(&huart3, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
+        HAL_UART_Transmit(&huart1, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
         gCounterSendEsp32=0;
-        //HAL_UART_Transmit(&huart2, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
+
+        //Begin Log Data to MicroSD
+        
+        if (fres != FR_OK) {
+            printf("Mount failed: %d\r\n", fres);
+            //return;
+        }
+        
+        fres = f_open(&fil, (char *)log_filename, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);     
+        f_puts(uart_buf_esp32, &fil);
+       
+        f_close(&fil);
+        
+        //	/* Check freeSpace space */
+
+        fres = f_getfree("", &fre_clust, &pfs);
+        totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
+        freeSpace  = (uint32_t)(fre_clust * pfs->csize * 0.5);
+        gFreeSpace = freeSpace;
+        gCounterLogSD++;
+        gCounterFS++;
+        fres = f_mount(NULL, "", 0);  
+        //End Log Data to MicroSD
+
     }
     gCounterSendEsp32++;
     HAL_Delay(1000);
