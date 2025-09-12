@@ -228,11 +228,11 @@ void ads1115_read(uint8_t control)
             HAL_StatusTypeDef status;
             if (i < 4)
             {
-                status = ADS1115_readSingleEnded_C0((0x04 + channel) << 4, &voltage);
+                status = ADS1115_readSingleEnded_C1((0x04 + channel) << 4, &voltage);
             }
             else
             {
-                status = ADS1115_readSingleEnded_C1((0x04 + channel) << 4, &voltage);
+                status = ADS1115_readSingleEnded_C0((0x04 + channel) << 4, &voltage);
             }
 
             if (status == HAL_OK)

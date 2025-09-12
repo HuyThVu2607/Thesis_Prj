@@ -33,18 +33,24 @@ char buffer[100];
 uint8_t gByte;
 uint8_t Data_RX[128];
 uint8_t gSelectChADC=0;
+uint8_t gExpandIO   =22;
+
+//Variable for RTC 
+uint8_t hours, minutes, seconds, day, date, month, year;
+
 float g_voltage[8];
 bool bLiveData = false;
 //Varible control State 
-bool bAnalogEnable       = false;
+bool bAnalogEnable       = true;
 bool bGPSEnable          = false;
 bool bDigitalEnable      = false;
 bool bTempHumEnable      = false;
-bool bRTCEnable          = false;
+bool bRTCEnable          = true;
 bool bLogDataToMicroSD   = false;
-
+bool bScanChanel         = true;
 //Struct MCP23008
 MCP23008_t mcp;
+extern ChannelConfig_t gChannelConfig[8];
 
 void Process_Init(void){
     //Init peripheral
@@ -65,7 +71,7 @@ void Process_Init(void){
 //	fres =f_mount(&fs, "", 0);
 //
 //	/* Open file to write */
-//	fres = f_open(&fil, "first.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+//	fres = f_open(&fil, "test_sd.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 //
 //	/* Check freeSpace space */
 //	fres = f_getfree("", &fre_clust, &pfs);
@@ -84,7 +90,7 @@ void Process_Init(void){
 //	fres = f_close(&fil);
 //
 //	/* Open file to read */
-//	fres = f_open(&fil, "first.txt", FA_READ);
+//	fres = f_open(&fil, "test_sd.txt", FA_READ);
 //
 //	while(f_gets(buffer, sizeof(buffer), &fil))
 //	{
@@ -94,12 +100,10 @@ void Process_Init(void){
 //	}
 //
 //	/* Close file */
-//	if(f_close(&fil) != FR_OK)
-//		//_Error_Handler(__FILE__, __LINE__);
+//	if(f_close(&fil) != FR_OK){}
 //
 //	/* Unmount SDCARD */
-//	if(f_mount(NULL, "", 1) != FR_OK)
-//		//_Error_Handler(__FILE__, __LINE__);
+//      if(f_mount(NULL, "", 1) != FR_OK){}
 
   //End
     char errMsg[] = "BEGIN TEST!\r\n";
@@ -116,6 +120,24 @@ void Process_Init(void){
     }
     //Init ExpandIO MCP23008
     MCP23008_Init(&mcp, &hi2c2, MCP23008_ADDRESS);
+    //Setup input for expandio
+    for (uint8_t i = 0; i < 8; i++) {
+        MCP23008_PinMode(&mcp, i, 0); // 1 = INPUT
+        //MCP23008_PullUp(&mcp, i, 0);  // Active pull-up
+    }
+
+    //Init RTC
+    uint8_t set_hour = 23;
+    uint8_t set_minute = 56;
+    uint8_t set_second = 23;
+    uint8_t set_date = 3;
+    uint8_t set_day = 1;
+    uint8_t set_month = 7;
+    uint8_t set_year = 25;
+
+    RTC_Init(&hi2c1);
+    RTC_SetTime(set_hour, set_minute, set_second, set_date, set_day, set_month, set_year);
+    //Init
     
 }
 
@@ -124,7 +146,7 @@ void Process_Run(void){
     //Get real time clock
     if(bRTCEnable){
       //Function get RTC
-
+      RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
     }
     //Get data of analog chanel
     if(bAnalogEnable){
@@ -158,6 +180,13 @@ void Process_Run(void){
 
     }
     
+    if(bScanChanel){
+      //gExpandIO = MCP23008_ReadGPIO(&mcp);
+      MCP23008_WriteGPIO(&mcp, 0xFF);
+    
+    }
+    
+    
 
     if(bLiveData){
         char LogMsg[100];
@@ -170,6 +199,8 @@ void Process_Run(void){
         if (bRTCEnable)
         {
           //Function Show RTC
+          snprintf(LogMsg, sizeof(LogMsg), ">>Time: %02d:%02d:%02d %d/%d/%d  \r\n",hours,minutes,seconds,date,month,year);
+				  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), 100);
 
         }else{
           sprintf(LogMsg, ">>Real Time Clock None Active!\r\n");
@@ -179,20 +210,20 @@ void Process_Run(void){
         //Show ADC value of chanel
         if (bAnalogEnable)
         {
-          for(int i = 0; i < 8; i++){
-              if(g_voltage[i]<=1000){
-                  sprintf(LogMsg, ">>ADC CHANEL%d = None Active\r\n",i,g_voltage[i]);
-                  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
-              }else{  
-                  sprintf(LogMsg, ">>ADC CHANEL%d = %.4f mV\r\n",i,g_voltage[i]);
-                  HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
-              }
-            }
-        }else{
-          sprintf(LogMsg, ">>Analog None Active!\r\n");
-          HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
-        }
+            for (int i = 0; i < 8; i++) {
+                if (!(gSelectChADC & (1 << i))) {
+                    sprintf(LogMsg, ">>ADC CH%d = None Active\r\n", i + 1);
+                    HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+                    continue;
+                }
 
+                float result = apply_formula(g_voltage[i], gChannelConfig[i].formula);
+                const char* unit = gChannelConfig[i].unit[0] ? gChannelConfig[i].unit : "";
+
+                sprintf(LogMsg, ">>ADC CH%d = %.2f%s\r\n", i + 1, result, unit);
+                HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
+            }
+        }
         //Show Data of digital chanel
         if (bDigitalEnable)
         {
@@ -509,7 +540,7 @@ static void MX_GPIO_Init(void)
                           |GPIO_PIN_0, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);

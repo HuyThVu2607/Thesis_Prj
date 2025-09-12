@@ -1,7 +1,7 @@
 #include "uart_ctrl.h"
+#include <math.h>
 
 extern UART_HandleTypeDef huart2;
-
 
 //Volatile Variable
 volatile    bool    bStatusADC  = true;
@@ -12,6 +12,8 @@ volatile    bool    bStatusLCD  = true;
 
 extern uint8_t Data_RX[128];
 extern uint8_t gSelectChADC;
+
+extern float g_voltage[8];
 //Global Variable
 static char     gUartLineBuffer[12];
 static bool     bDataInProcess = false;
@@ -28,32 +30,70 @@ extern bool bTempHumEnable             ;
 extern bool bRTCEnable                 ;
 extern bool bLogDataToMicroSD          ;
 
+ChannelConfig_t gChannelConfig[8];
+static int gSelectedConfigCh = -1;           // Track which channel is being configured
+
+float apply_formula(float x, const char* formula) {
+    float y = 0.0f;
+    float a = 1.0f, b = 0.0f;
+
+    if (sscanf(formula, "y=x*%f+%f", &a, &b) == 2)
+        y = x * a + b;
+    else if (sscanf(formula, "y=%fx+%f", &a, &b) == 2)
+        y = a * x + b;
+    else if (sscanf(formula, "y=x/%f+%f", &a, &b) == 2)
+        y = x / a + b;
+    else
+        y = x;
+
+    return y;
+}
+
+void uart_display_live_data(void) {
+    char resp[128];
+    for (int i = 0; i < 8; ++i) {
+        if ((gSelectChADC & (1 << i))) {
+            float val = apply_formula(g_voltage[8], gChannelConfig[i].formula);
+            sprintf(resp, "CH%d = %.2f%s\r\n", i + 1, val,
+                gChannelConfig[i].unit[0] ? gChannelConfig[i].unit : "");
+            HAL_UART_Transmit(&huart2, (uint8_t*)resp, strlen(resp), HAL_MAX_DELAY);
+        }
+    }
+}
+
+void uart_show_config(void) {
+    char resp[128];
+    for (int i = 0; i < 8; i++) {
+        if (gSelectChADC & (1 << i)) {
+            if (gChannelConfig[i].configured) {
+                sprintf(resp, "CH%d = %s [%s]\r\n", i + 1, gChannelConfig[i].formula, gChannelConfig[i].unit);
+            } else {
+                sprintf(resp, "CH%d = Not Configured\r\n", i + 1);
+            }
+            HAL_UART_Transmit(&huart2, (uint8_t*)resp, strlen(resp), HAL_MAX_DELAY);
+        }
+    }
+}
+
+void uart_proc_config(void) {
+    char resp[128];
+    bLiveData = false;
+    sprintf(resp, ">>Please select channel config\r\n");
+    HAL_UART_Transmit(&huart2, (uint8_t*)resp, strlen(resp), HAL_MAX_DELAY);
+
+    for (int i = 0; i < 8; ++i) {
+        sprintf(resp, "CH%d : %s\r\n", i + 1,
+                gSelectChADC & (1 << i) ?
+                (gChannelConfig[i].configured ? "Configured" : "Enable") : "Non Active");
+        HAL_UART_Transmit(&huart2, (uint8_t*)resp, strlen(resp), HAL_MAX_DELAY);
+    }
+}
+
+
+
 void uart_ctrl_receive(void){
     if(!bDataInProcess){
-//        uint8_t lUartDataReceive;
-//        if(HAL_UART_Receive(&huart2, &lUartDataReceive, 1, 5) == HAL_OK){
-//            if ((lUartDataReceive == '\n' || lUartDataReceive == '\r')){
-//                gUartLineBuffer[Index] = '\0';
-//                Index = 0;
-//                bDataInProcess = true;
-//                char ack[] = "OK\r\n";
-//                HAL_UART_Transmit(&huart2, (uint8_t *)ack, strlen(ack), HAL_MAX_DELAY);
-//            }else if(Index < UART_RX_BUFFER_SIZE - 1){
-//                gUartLineBuffer[Index++] = lUartDataReceive;
-//            }
-//        }
-//        char *Clean = gUartLineBuffer;
-//        while (*Clean != '\0') {
-//            if (*Clean == '\r' || *Clean == '\n') {
-//                *Clean = '\0';  
-//                break;
-//            }
-//            Clean++;
-//        }
         bDataInProcess = true;
-//        char ack[] = "OK\r\n";
-//        HAL_UART_Transmit(&huart2, (uint8_t *)ack, sizeof(ack), 10);
-
     }
 }
 
@@ -97,12 +137,56 @@ void uart_handle_mess(void){
 
                 break;
 
-            default:
-                sprintf(gMessRespone, ">>INVALID COMMAND!\r\n");
+            case CMD_SELECT: {
+                int ch;
+                sscanf((char*)Data_RX, "AT+SELECT=%d", &ch);
+                if (ch < 1 || ch > 8 || !(gSelectChADC & (1 << (ch - 1)))) {
+                    sprintf(gMessRespone, ">>FAIL\r\n");
+                } else {
+                    gSelectedConfigCh = ch - 1;
+                    sprintf(gMessRespone, ">>OK\r\n>>Please Apply your formular with \"x\" is adc variable example  y = ax +b\r\n");
+                }
                 HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
                 bDataInProcess = false;
                 break;
             }
+
+            case CMD_FORMULER:
+                if (gSelectedConfigCh >= 0 && gSelectedConfigCh < 8) {
+                    char* eq = strchr((char*)Data_RX, '=');
+                    if (eq && strlen(eq + 1) < sizeof(gChannelConfig[gSelectedConfigCh].formula)) {
+                        strcpy(gChannelConfig[gSelectedConfigCh].formula, eq + 1);
+                        gChannelConfig[gSelectedConfigCh].configured = true;
+                        sprintf(gMessRespone, ">>OK\r\n>>your formula is %s\r\n>>Please enter your unit if dont have please enter 0\r\n", gChannelConfig[gSelectedConfigCh].formula);
+                    } else {
+                        sprintf(gMessRespone, ">>INVALID FORMULA\r\n");
+                    }
+                    HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                }
+                bDataInProcess = false;
+                break;
+
+            case CMD_UNIT:
+                if (gSelectedConfigCh >= 0 && gSelectedConfigCh < 8) {
+                    char* eq = strchr((char*)Data_RX, '=');
+                    if (eq) {
+                        if (strcmp(eq + 1, "0") == 0) gChannelConfig[gSelectedConfigCh].unit[0] = '\0';
+                        else strncpy(gChannelConfig[gSelectedConfigCh].unit, eq + 1, sizeof(gChannelConfig[gSelectedConfigCh].unit));
+
+                        sprintf(gMessRespone, ">>Your unit enter is : %s\r\n", gChannelConfig[gSelectedConfigCh].unit);
+                    } else {
+                        sprintf(gMessRespone, ">>INVALID UNIT\r\n");
+                    }
+                    HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                }
+                bDataInProcess = false;
+
+                        default:
+                            sprintf(gMessRespone, ">>INVALID COMMAND!\r\n");
+                            HAL_UART_Transmit(&huart2, (uint8_t*)gMessRespone, strlen(gMessRespone), HAL_MAX_DELAY);
+                            bDataInProcess = false;
+                            break;
+                        }
             return;
 
 
@@ -116,11 +200,6 @@ void uart_handle_mess(void){
 
 }
 
-void uart_proc_config(void){
-
-
-    bDataInProcess = false;
-}
 
 AT_Command_t identify_command(const char *cmd)
 {
@@ -140,6 +219,9 @@ AT_Command_t identify_command(const char *cmd)
     else if (strncmp(cmd, "AT+EXIT",7)    == 0) return CMD_EXIT;
     else if (strncmp(cmd, "AT+STATUS",8)  == 0) return CMD_STATUS;
     else if (strncmp(cmd, "AT+SET=",7)== 0) return CMD_SET;
+    else if (strncmp(cmd, "AT+SELECT=",10) == 0) return CMD_SELECT;
+    else if (strncmp(cmd, "AT+FORMULER=",12) == 0) return CMD_FORMULER;
+    else if (strncmp(cmd, "AT+UNIT=",8) == 0) return CMD_UNIT;
     return CMD_NONE;
 }
 

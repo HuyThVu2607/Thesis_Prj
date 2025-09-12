@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "mcp23008.h"
+#include "rtc.h"
+#include "uart_ctrl.h"
 //Define
 
 //COMMAND INIT ERROR

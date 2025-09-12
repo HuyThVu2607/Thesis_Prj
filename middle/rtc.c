@@ -4,9 +4,10 @@
  */
 
 #include "rtc.h"
+#include "process.h"
 
-static I2C_HandleTypeDef *rtc_i2c = NULL;  // Local handle to use I2C
-
+//static I2C_HandleTypeDef *&hi2c1 = NULL;  // Local handle to use I2C
+extern I2C_HandleTypeDef hi2c1;
 // Convert from BCD to Decimal
 static uint8_t BCD_to_Dec(uint8_t val) {
     return (val >> 4) * 10 + (val & 0x0F);
@@ -19,20 +20,20 @@ static uint8_t Dec_to_BCD(uint8_t val) {
 
 // Write a value to a DS3231 register
 static void RTC_Write(uint8_t reg, uint8_t value) {
-    HAL_I2C_Mem_Write(rtc_i2c, DS3231_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &value, 1, 100);
+    HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, reg, 1, &value, 1, 100);
 }
 
 // Read a value from a DS3231 register
 static uint8_t RTC_Read(uint8_t reg) {
     uint8_t value;
-    HAL_I2C_Mem_Read(rtc_i2c, DS3231_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &value, 1, 100);
+    HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, reg, 1, &value, 1, 100);
     return value;
 }
 
 // Public functions
 
 void RTC_Init(I2C_HandleTypeDef *hi2c) {
-    rtc_i2c = hi2c;
+    //&hi2c1 = hi2c;
 }
 
 void RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds,

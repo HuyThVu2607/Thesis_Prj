@@ -29,8 +29,20 @@ typedef enum {
     CMD_LIVEDATA        ,
     CMD_DISLIVEDATA     ,
     CMD_GETDATA         ,
+    CMD_SELECT          ,
+    CMD_FORMULER        ,
+    CMD_UNIT            ,
     CMD_SET
 } AT_Command_t;
+typedef struct {
+    bool active;
+    bool configured;
+    char formula[64];
+    char unit[16];
+} ChannelConfig_t;
+
+extern ChannelConfig_t gChannelConfig[8];
+extern float g_voltage[8];
 
 //Function
 

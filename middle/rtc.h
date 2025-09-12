@@ -6,7 +6,7 @@
 #ifndef __RTC_H__
 #define __RTC_H__
 
-#include "stm32f1xx_hal.h"  // Sửa lại theo dòng MCU của bạn (ví dụ: stm32f4xx_hal.h)
+#include "stm32f4xx_hal.h"  // Sửa lại theo dòng MCU của bạn (ví dụ: stm32f4xx_hal.h)
 
 // I2C address of DS3231 (7-bit address shifted for HAL)
 #define DS3231_ADDRESS     (0x68 << 1)
@@ -28,6 +28,8 @@ extern "C" {
  * @brief Initialize RTC module with the I2C handle.
  * @param hi2c Pointer to HAL I2C handle
  */
+static uint8_t Dec_to_BCD(uint8_t val);
+static uint8_t BCD_to_Dec(uint8_t val);
 void RTC_Init(I2C_HandleTypeDef *hi2c);
 
 /**
