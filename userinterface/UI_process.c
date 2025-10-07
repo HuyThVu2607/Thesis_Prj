@@ -43,7 +43,7 @@ void UI_Process_Run(void){
         for (int i = 0; i < 4; i++)
         {
             int address=0;
-            if(g_voltage[i]!=-1){
+            if(g_voltage[i] != -1 && g_voltage[i] > 0){
                 address = 50 + i*10;
                 snprintf(buffer_lcd, sizeof(buffer_lcd), "Chanel %d : %.3f", i+1 ,g_voltage[i]);
                 ILI9341_Draw_Text(buffer_lcd, 10, address, GREEN, 1, BLACK);	
@@ -58,7 +58,7 @@ void UI_Process_Run(void){
         for (int i = 4; i < 8; i++)
         {
             int address=0;
-            if(g_voltage[i]!=-1){
+            if(g_voltage[i]!=-1 && g_voltage[i] > 1){
                 address = 50 + (i-4)*10;
                 snprintf(buffer_lcd, sizeof(buffer_lcd), "Chanel %d : %.3f", i+1 ,g_voltage[i]);
                 ILI9341_Draw_Text(buffer_lcd, 140, address, GREEN, 1, BLACK);	

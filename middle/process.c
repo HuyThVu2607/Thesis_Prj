@@ -99,7 +99,7 @@ void Process_Init(void){
     MX_USART2_UART_Init();
     MX_USART3_UART_Init();
     MX_FATFS_Init();
-    HAL_Delay(100);
+    HAL_Delay(10);
 
     //For test SD card
     /* Mount SD Card */
@@ -144,7 +144,7 @@ void Process_Init(void){
 
   //End
     char errMsg[] = "BEGIN TEST!\r\n";
-    HAL_UART_Transmit(&huart2, (uint8_t*)errMsg, strlen(errMsg), HAL_MAX_DELAY);
+    //HAL_UART_Transmit(&huart2, (uint8_t*)errMsg, strlen(errMsg), HAL_MAX_DELAY);
         
     //Init interrupt receive uart2
     HAL_UART_Receive_IT(&huart2, &gByte, 1);
@@ -195,23 +195,23 @@ void Process_Init(void){
     }
 
     //Greate MicroSD
-    //RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
-    // sprintf((char *)log_filename, "log_%04d%02d%02d_%02d%02d%02d.csv", year+2000, month, date, hours, minutes, seconds);
+    RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
+     sprintf((char *)log_filename, "log_%04d%02d%02d_%02d%02d%02d.csv", year+2000, month, date, hours, minutes, seconds);
     
-    // fres = f_mount(&fs, "", 1);
+     fres = f_mount(&fs, "", 1);
 
-    // if (fres != FR_OK) {
-    //     printf("Mount failed: %d\r\n", fres);
-    //     return;
-    // }
-    // fres = f_open(&fil, (char *)log_filename, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
-    // if (fres == FR_OK) {
-    //     f_puts("Analog1,Analog2,Analog3,Analog4,Analog5,Analog6,Analog7,Analog8,Digital1,Digital2,Digital3,Digital4,Temp,Humid,Year,Month,Date,Hour,Min,Sec\n", &fil);
-    //     //f_close(&fil);
-    // } else {
-    //     printf("File create failed: %d\r\n", fres);
-    // }
-    // //fres = f_mount(NULL, "", 1);
+     if (fres != FR_OK) {
+         printf("Mount failed: %d\r\n", fres);
+         return;
+     }
+     fres = f_open(&fil, (char *)log_filename, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+     if (fres == FR_OK) {
+         f_puts("Analog1,Analog2,Analog3,Analog4,Analog5,Analog6,Analog7,Analog8,Digital1,Digital2,Digital3,Digital4,Temp,Humid,Year,Month,Date,Hour,Min,Sec\n", &fil);
+         f_close(&fil);
+     } else {
+         printf("File create failed: %d\r\n", fres);
+     }
+     //fres = f_mount(NULL, "", 1);
     
 }
 
@@ -323,7 +323,7 @@ void Process_Run(void){
               g_voltage[1]=g_voltage[1]/1000*2.5-2.5+0.09;
               if (gLowThresHoldApply[1]!=0xFFFF && gHighThresHoldApply[1]!=0xFFFF)
               {
-                g_voltage[0] = Convert_To_Engineering_Value(SIGNAL_0_10V, g_voltage[1], gLowThresHoldApply[1], gHighThresHoldApply[1]);
+                g_voltage[1] = Convert_To_Engineering_Value(SIGNAL_0_10V, g_voltage[1], gLowThresHoldApply[1], gHighThresHoldApply[1]);
               }    
               sprintf(LogMsg, ">>ADC CHANEL1 = %.4f V\r\n",g_voltage[1]);
               HAL_UART_Transmit(&huart2, (uint8_t*)LogMsg, strlen(LogMsg), HAL_MAX_DELAY);
@@ -403,6 +403,7 @@ void Process_Run(void){
     }
 
     if(gCounterSendEsp32==5){
+        //Transmit data for ESP32
         sprintf(uart_buf_esp32,
         "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d,%d,%.1f,%.1f,%d,%d,%d,%d,%d,%d\n",
         g_voltage[0], g_voltage[1], g_voltage[2], g_voltage[3], g_voltage[4], g_voltage[5], g_voltage[6], g_voltage[7],
@@ -410,30 +411,27 @@ void Process_Run(void){
         gTemperature, gHumidity,
         year+2000, month, date, hours, minutes, seconds);
         HAL_UART_Transmit(&huart3, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
+        
+        //Transmit for RS485
         HAL_UART_Transmit(&huart1, (uint8_t*)uart_buf_esp32, strlen(uart_buf_esp32), HAL_MAX_DELAY);
         gCounterSendEsp32=0;
 
         //Begin Log Data to MicroSD
-        
-        if (fres != FR_OK) {
-            printf("Mount failed: %d\r\n", fres);
-            //return;
-        }
-        
-        fres = f_open(&fil, (char *)log_filename, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);     
-        f_puts(uart_buf_esp32, &fil);
-       
-        f_close(&fil);
-        
+//         fres = f_open(&fil, (char *)log_filename, FA_OPEN_APPEND | FA_WRITE | FA_READ);
+//         if (fres == FR_OK) {
+//             f_lseek(&fil, f_size(&fil)); 
+//             f_puts(uart_buf_esp32, &fil);
+//             f_close(&fil);
+//         } else {
+//             printf("File create failed: %d\r\n", fres);
+//         }
         //	/* Check freeSpace space */
-
         fres = f_getfree("", &fre_clust, &pfs);
         totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
         freeSpace  = (uint32_t)(fre_clust * pfs->csize * 0.5);
         gFreeSpace = freeSpace;
         gCounterLogSD++;
         gCounterFS++;
-        fres = f_mount(NULL, "", 0);  
         //End Log Data to MicroSD
 
     }
