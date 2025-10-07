@@ -18,6 +18,7 @@ void UI_Process_Init(void){
      HAL_GPIO_WritePin(GPIOE, GPIO_PIN_10, GPIO_PIN_SET);
 }
 
+extern uint32_t gFreeSpace;
 void UI_Process_Run(void){
     //uart_ctrl_receive();
     //uart_handle_mess();
@@ -42,7 +43,7 @@ void UI_Process_Run(void){
         for (int i = 0; i < 4; i++)
         {
             int address=0;
-            if(g_voltage[i]!=-1){
+            if(g_voltage[i] != -1 && g_voltage[i] > 0){
                 address = 50 + i*10;
                 snprintf(buffer_lcd, sizeof(buffer_lcd), "Chanel %d : %.3f", i+1 ,g_voltage[i]);
                 ILI9341_Draw_Text(buffer_lcd, 10, address, GREEN, 1, BLACK);	
@@ -57,7 +58,7 @@ void UI_Process_Run(void){
         for (int i = 4; i < 8; i++)
         {
             int address=0;
-            if(g_voltage[i]!=-1){
+            if(g_voltage[i]!=-1 && g_voltage[i] > 1){
                 address = 50 + (i-4)*10;
                 snprintf(buffer_lcd, sizeof(buffer_lcd), "Chanel %d : %.3f", i+1 ,g_voltage[i]);
                 ILI9341_Draw_Text(buffer_lcd, 140, address, GREEN, 1, BLACK);	
@@ -101,7 +102,8 @@ void UI_Process_Run(void){
         
         //MicroSD Display
 		ILI9341_Draw_Text("MicroSD :", 10, 150, WHITE, 1, BLACK);
-        ILI9341_Draw_Text("Free Space : 5612611 byte", 10, 160, ORANGE, 1, BLACK);
+        snprintf(buffer_lcd, sizeof(buffer_lcd), "Free Space: %d bytes ",gFreeSpace);
+        ILI9341_Draw_Text(buffer_lcd, 10, 160, ORANGE, 1, BLACK);
         
         //BAT Status Display
 		ILI9341_Draw_Text("BAT : 70%", 10, 170, WHITE, 1, BLACK);
